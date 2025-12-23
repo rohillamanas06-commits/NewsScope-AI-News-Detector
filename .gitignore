@@ -1,0 +1,8 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+
+# Node.js dependencies
+node_modules/
