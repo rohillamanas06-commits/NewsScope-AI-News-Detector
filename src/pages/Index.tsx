@@ -455,7 +455,8 @@ const Index: React.FC = () => {
               <form 
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
+                  const form = e.currentTarget;
+                  const formData = new FormData(form);
                   const data = {
                     name: formData.get('name'),
                     email: formData.get('email'),
@@ -502,7 +503,7 @@ const Index: React.FC = () => {
                         title: "Feedback Sent Successfully! 🎉",
                         description: "Thank you for your feedback. We'll review it and get back to you soon.",
                       });
-                      e.currentTarget.reset();
+                      if (form) form.reset();
                     } else {
                       toast({
                         title: "Failed to Send Feedback",
@@ -522,7 +523,7 @@ const Index: React.FC = () => {
                         title: "Feedback Sent Successfully!",
                         description: "Thank you for your feedback. We'll review it and get back to you soon.",
                       });
-                      e.currentTarget.reset();
+                      if (form) form.reset();
                     } else {
                       toast({
                         title: "Connection Error",
