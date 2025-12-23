@@ -90,7 +90,6 @@ export const Header: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="w-9 h-9 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-all hover:scale-110 border border-border"
-              title="Toggle Theme"
             >
               <Palette className="w-4 h-4 text-foreground" />
             </button>
