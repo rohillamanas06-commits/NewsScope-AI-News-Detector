@@ -155,8 +155,8 @@ const Index: React.FC = () => {
           ))}
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 pt-20 w-full max-w-full">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div className="container mx-auto px-4 relative z-10 pt-20">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
             {/* Left side - Text content */}
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 mb-8 opacity-0 animate-fade-in">
@@ -164,13 +164,13 @@ const Index: React.FC = () => {
                 <span className="text-sm font-medium text-gold">AI-Powered Fact Checking</span>
               </div>
 
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 opacity-0 animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 opacity-0 animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
                 <span className="text-foreground">Uncover the </span>
                 <span className="text-gradient">Truth</span>
                 <span className="text-foreground"> Behind Every Story</span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed opacity-0 animate-slide-up" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+              <p className="text-base sm:text-lg md:text-xl lg:text-xl text-muted-foreground mb-10 leading-relaxed opacity-0 animate-slide-up" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
                 NewsScope uses advanced AI to analyze news articles, detect misinformation, 
                 and help you make informed decisions about what you read.
               </p>
@@ -187,7 +187,7 @@ const Index: React.FC = () => {
 
             {/* Right side - News Images */}
             <div className="relative opacity-0 animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
-              <div className="relative h-[400px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto max-w-md md:max-w-none">
+              <div className="relative h-[400px] sm:h-[500px] md:h-[550px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto max-w-md md:max-w-none">
                 {/* Image Grid */}
                 <div className="absolute inset-0 grid grid-cols-2 gap-3 p-4 bg-card/50">
                   {/* Large featured image */}
@@ -255,13 +255,13 @@ const Index: React.FC = () => {
       </div>
 
       {/* Features Section */}
-      <section className="py-16 md:py-32 bg-background relative overflow-x-hidden">
+      <section className="py-16 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-16">
             <span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
               Features
             </span>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
               Why Choose NewsScope?
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base px-4">
@@ -289,14 +289,14 @@ const Index: React.FC = () => {
       </div>
 
       {/* How It Works */}
-      <section className="py-16 md:py-32 bg-background relative overflow-x-hidden">
+      <section className="py-16 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-20 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-16 lg:gap-20 items-center">
             <div>
               <span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
                 How It Works
               </span>
-              <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold mb-8">
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8">
                 Verify News in Three Simple Steps
               </h2>
               
@@ -361,14 +361,14 @@ const Index: React.FC = () => {
       </div>
 
       {/* Feedback & Developer Section */}
-      <section className="py-16 md:py-20 bg-background overflow-x-hidden">
+      <section className="py-16 md:py-20 lg:py-24 bg-background overflow-x-hidden">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 max-w-7xl mx-auto">
             
             {/* Left - Meet the Developer */}
             <div className="flex flex-col items-center justify-center">
               <div className="text-center px-4">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
                   Meet the Developer
                 </h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-gold to-transparent mx-auto mb-12"></div>
@@ -443,7 +443,7 @@ const Index: React.FC = () => {
             {/* Right - Send Feedback */}
             <div className="px-4">
               <div className="mb-6 md:mb-8">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
+                <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
                   Send Your Feedback
                 </h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-gold to-transparent mb-4"></div>
