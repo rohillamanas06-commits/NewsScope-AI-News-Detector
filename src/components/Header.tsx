@@ -131,10 +131,10 @@ export const Header: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="w-full py-3 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center gap-2 transition-all border border-border"
+              className="w-full py-3 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-all border border-border text-2xl"
+              title="Toggle Theme"
             >
-              <Palette className="w-4 h-4 text-foreground" />
-              <span className="text-sm font-medium">Toggle Theme</span>
+              🎨
             </button>
           </div>
         </div>
