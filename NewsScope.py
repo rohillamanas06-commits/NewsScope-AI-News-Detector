@@ -481,12 +481,15 @@ if __name__ == '__main__':
     print("NewsScope - AI Fake News Detector")
     print("=" * 50)
     print(f"API Key Configured: {bool(GEMINI_API_KEY)}")
-    print("Starting server on http://localhost:5000")
+    
+    # Get port from environment variable for cloud deployment
+    port = int(os.getenv('PORT', 5000))
+    print(f"Starting server on port {port}")
     print("=" * 50)
     
     # Run Flask app
     app.run(
         host='0.0.0.0',
-        port=5000,
-        debug=True
+        port=port,
+        debug=os.getenv('FLASK_ENV') != 'production'
     )

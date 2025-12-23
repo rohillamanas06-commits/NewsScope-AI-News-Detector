@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: newsscope-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn NewsScope:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM_EMAIL
+        sync: false
+      - key: SENDGRID_TO_EMAIL
+        sync: false
