@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Newspaper, Menu, X, Palette } from 'lucide-react';
+import { Newspaper, Menu, X, Palette, ScanSearch } from 'lucide-react';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 
@@ -129,8 +129,9 @@ export const Header: React.FC = () => {
               Detect
             </Link>
             
-            <Button variant="default" asChild className="w-full">
-              <Link to="/detect" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button variant="default" asChild className="w-full bg-gold text-background hover:bg-gold/90">
+              <Link to="/detect" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-center gap-2">
+                <ScanSearch className="w-5 h-5" />
                 Analyze News
               </Link>
             </Button>
