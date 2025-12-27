@@ -419,12 +419,12 @@ def send_feedback():
         
         name = data.get('name')
         email = data.get('email')
-        message = data.get('message')
+        feedback_message = data.get('message')
         
         # Check if SendGrid is configured
         if not SENDGRID_API_KEY:
             # If SendGrid not configured, just log and return success
-            print(f"Feedback received from {name} ({email}): {message}")
+            print(f"Feedback received from {name} ({email}): {feedback_message}")
             return jsonify({
                 "success": True,
                 "message": "Feedback received (SendGrid not configured)"
@@ -440,7 +440,7 @@ def send_feedback():
                     <p><strong>Email:</strong> {email}</p>
                     <p><strong>Message:</strong></p>
                     <p style="background-color: white; padding: 15px; border-left: 4px solid #d4a574;">
-                        {message}
+                        {feedback_message}
                     </p>
                 </div>
                 <p style="color: #666; font-size: 12px;">
@@ -451,7 +451,7 @@ def send_feedback():
         """
         
         # Create SendGrid message
-        message = Mail(
+        mail_message = Mail(
             from_email=SENDGRID_FROM_EMAIL,
             to_emails=SENDGRID_TO_EMAIL,
             subject=f'NewsScope Feedback from {name}',
@@ -460,7 +460,7 @@ def send_feedback():
         
         # Send email
         sg = SendGridAPIClient(SENDGRID_API_KEY)
-        response = sg.send(message)
+        response = sg.send(mail_message)
         
         return jsonify({
             "success": True,
