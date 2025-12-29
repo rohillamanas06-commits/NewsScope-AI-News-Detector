@@ -392,7 +392,7 @@ const Index: React.FC = () => {
                       Founder & Developer
                     </p>
                     <p className="text-sm text-muted-foreground mt-4 max-w-lg mx-auto leading-relaxed">
-                      Passionate AI-based developer currently pursuing BTech in Computer Science and Engineering at Manipal University Jaipur. Experienced in building intelligent applications with focus on healthcare, transportation and smart solutions. Dedicated to leveraging Artificial Intelligence to solve real-world problems.
+                      Passionate about building applications that make a difference
                     </p>
                   </div>
                   
