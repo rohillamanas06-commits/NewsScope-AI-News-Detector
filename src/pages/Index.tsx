@@ -14,7 +14,8 @@ import {
   Linkedin,
   Mail,
   Send,
-  Loader2
+  Loader2,
+  Pilcrow
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FeatureCard } from '@/components/FeatureCard';
@@ -426,6 +427,16 @@ const Index: React.FC = () => {
                       title="Instagram"
                     >
                       <Instagram className="w-6 h-6 text-gold" />
+                    </a>
+                    
+                    <a 
+                      href="https://peerlist.io/rohillamanas06" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 rounded-full bg-background hover:bg-gold/20 border border-border flex items-center justify-center transition-all hover:scale-110 hover:shadow-lg"
+                      title="Peerlist"
+                    >
+                      <Pilcrow className="w-6 h-6 text-gold" />
                     </a>
                     
                     <a 
