@@ -111,17 +111,17 @@ const Index: React.FC = () => {
                 and help you make informed decisions about what you read.
               </p>
 
-              <div className="grid grid-cols-2 gap-4 w-full sm:flex sm:flex-row sm:items-start opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-                <Button variant="default" size="xl" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full">
-                  <Link to="/detect" className="gap-3 justify-between">
-                    Get Started
-                    <ArrowRight className="w-5 h-5" />
+              <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                <Button variant="default" size="xl" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full sm:w-auto flex-1">
+                  <Link to="/detect" className="flex items-center justify-center gap-2 px-4">
+                    <span className="truncate">Get Started</span>
+                    <ArrowRight className="w-4 h-4 flex-shrink-0" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="xl" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold w-full">
-                  <Link to="/learn-more" className="gap-3 justify-between">
-                    Learn More
-                    <ArrowRight className="w-5 h-5" />
+                <Button variant="outline" size="xl" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold w-full sm:w-auto flex-1">
+                  <Link to="/learn-more" className="flex items-center justify-center gap-2 px-4">
+                    <span className="truncate">Learn More</span>
+                    <ArrowRight className="w-4 h-4 flex-shrink-0" />
                   </Link>
                 </Button>
               </div>
