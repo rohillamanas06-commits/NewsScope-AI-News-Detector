@@ -111,19 +111,23 @@ const Index: React.FC = () => {
                 and help you make informed decisions about what you read.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-                  <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold min-w-[160px] px-5 py-2.5">
-                    <Link to="/detect" className="flex items-center justify-center gap-2 px-3">
-                      <span className="truncate">Get Started</span>
-                      <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                    </Link>
-                  </Button>
-                  <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold min-w-[160px] px-5 py-2.5">
-                    <Link to="/learn-more" className="flex items-center justify-center gap-2 px-3">
-                      <span className="truncate">Learn More</span>
-                      <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                    </Link>
-                  </Button>
+              <div className="flex flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                  <div className="flex-1 flex justify-start">
+                    <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold min-w-[140px] px-5 py-2.5 w-full max-w-xs">
+                      <Link to="/detect" className="flex items-center justify-center gap-2 px-3">
+                        <span className="truncate">Get Started</span>
+                        <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="flex-1 flex justify-end">
+                    <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold min-w-[140px] px-5 py-2.5 w-full max-w-xs">
+                      <Link to="/learn-more" className="flex items-center justify-center gap-2 px-3">
+                        <span className="truncate">Learn More</span>
+                        <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                      </Link>
+                    </Button>
+                  </div>
               </div>
             </div>
 
