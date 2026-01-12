@@ -36,14 +36,23 @@ export const Header: React.FC = () => {
   const isHome = location.pathname === '/';
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-        isScrolled || !isHome
-          ? "bg-background/80 backdrop-blur-lg shadow-md border-b border-border/50"
-          : "bg-transparent"
+    <>
+      {/* Overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
       )}
-    >
+      
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          isScrolled || !isHome
+            ? "bg-background/80 backdrop-blur-lg shadow-md border-b border-border/50"
+            : "bg-transparent"
+        )}
+      >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -111,7 +120,7 @@ export const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-slide-down">
+        <div className="md:hidden fixed top-16 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border animate-slide-down">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             <Link 
               to="/"
@@ -140,5 +149,6 @@ export const Header: React.FC = () => {
         </div>
       )}
     </header>
+    </>
   );
 };

@@ -111,15 +111,15 @@ const Index: React.FC = () => {
                 and help you make informed decisions about what you read.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-start gap-4 opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-                <Button variant="default" size="xl" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full sm:w-auto">
-                  <Link to="/detect" className="gap-3">
+              <div className="grid grid-cols-2 gap-4 w-full sm:flex sm:flex-row sm:items-start opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                <Button variant="default" size="xl" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full">
+                  <Link to="/detect" className="gap-3 justify-between">
                     Get Started
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="xl" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold w-full sm:w-auto">
-                  <Link to="/learn-more" className="gap-3">
+                <Button variant="outline" size="xl" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold w-full">
+                  <Link to="/learn-more" className="gap-3 justify-between">
                     Learn More
                     <ArrowRight className="w-5 h-5" />
                   </Link>
