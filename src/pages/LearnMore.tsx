@@ -82,9 +82,9 @@ const LearnMore: React.FC = () => {
       </div>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
+      <section className="py-20 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-12 md:mb-16 px-4">
             <span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
               Features
             </span>
@@ -96,7 +96,7 @@ const LearnMore: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
             {features.map((feature, index) => (
               <FeatureCard
                 key={index}
@@ -116,7 +116,7 @@ const LearnMore: React.FC = () => {
       </div>
 
       {/* How It Works */}
-      <section className="py-16 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
+      <section className="py-20 md:py-24 lg:py-32 relative bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-8 md:gap-16 lg:gap-20 items-center">
             <div>
