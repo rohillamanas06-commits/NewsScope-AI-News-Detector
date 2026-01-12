@@ -63,11 +63,11 @@ const Index: React.FC = () => {
   const currentImages = newsImages[currentGenre.id];
 
   return (
-    <div className="h-screen bg-background overflow-hidden">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-muted/30">
+      <section className="relative py-16 md:py-0 md:min-h-screen flex items-center overflow-hidden bg-muted/30">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
@@ -128,12 +128,12 @@ const Index: React.FC = () => {
             </div>
 
             {/* Right side - News Images */}
-            <div className="relative opacity-0 animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
-              <div className="relative h-[400px] sm:h-[500px] md:h-[550px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto max-w-md md:max-w-none">
+            <div className="relative opacity-0 animate-fade-in mt-12 md:mt-0" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+              <div className="relative h-[350px] sm:h-[400px] md:h-[550px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto w-full max-w-md md:max-w-none">
                 {/* Image Grid */}
-                <div className="absolute inset-0 grid grid-cols-2 gap-3 p-4 bg-card/50">
+                <div className="absolute inset-0 grid grid-cols-2 gap-2 sm:gap-3 p-3 sm:p-4 bg-card/50">
                   {/* Large featured image */}
-                  <div className="col-span-2 h-[240px] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 relative group">
+                  <div className="col-span-2 h-[180px] sm:h-[240px] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 relative group">
                     <img 
                       key={currentImages[0].url}
                       src={currentImages[0].url}
@@ -148,7 +148,7 @@ const Index: React.FC = () => {
                   </div>
                   
                   {/* Smaller images */}
-                  <div className="h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-700 relative group">
+                  <div className="h-[140px] sm:h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-700 relative group">
                     <img 
                       key={currentImages[1].url}
                       src={currentImages[1].url}
@@ -161,7 +161,7 @@ const Index: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-purple-700 via-purple-600 to-purple-700 relative group">
+                  <div className="h-[140px] sm:h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-purple-700 via-purple-600 to-purple-700 relative group">
                     <img 
                       key={currentImages[2].url}
                       src={currentImages[2].url}
