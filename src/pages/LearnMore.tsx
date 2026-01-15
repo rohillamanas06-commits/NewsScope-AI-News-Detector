@@ -182,6 +182,44 @@ const LearnMore: React.FC = () => {
         </div>
       </section>
 
+      {/* Meet the Developer Section */}
+      <section className="py-20 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
+        <div className="container mx-auto px-4 flex flex-col items-center text-center">
+          <div className="max-w-xl mx-auto">
+            <span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
+              Meet the Developer
+            </span>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gold/80 to-primary/80 flex items-center justify-center mb-2 shadow-lg overflow-hidden border-4 border-gold">
+                <img src="/founder.Jpg" alt="Manas Rohilla" className="object-cover w-full h-full" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground">Manas Rohilla</h3>
+              <p className="text-base text-muted-foreground font-medium mb-2">Founder & Developer</p>
+              <p className="text-muted-foreground max-w-md mx-auto text-sm sm:text-base mb-4">
+                Passionate about building applications that make a difference.
+              </p>
+              <div className="flex flex-row gap-4 justify-center mt-2">
+                <a href="https://instagram.com/manas_rohilla_" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-yellow-400 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                  <Instagram className="w-5 h-5 text-white" />
+                </a>
+                <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-800 to-gray-600 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                  <Github className="w-5 h-5 text-white" />
+                </a>
+                <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                  <Linkedin className="w-5 h-5 text-white" />
+                </a>
+                <a href="mailto:rohillamanas06@gmail.com" className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                  <Mail className="w-5 h-5 text-white" />
+                </a>
+                <a href="https://peerlist.io/rohillamanas06" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-teal-400 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
+                  <Pilcrow className="w-5 h-5 text-white" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
 
       <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
