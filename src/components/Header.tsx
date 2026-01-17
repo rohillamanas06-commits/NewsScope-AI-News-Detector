@@ -94,6 +94,17 @@ export const Header: React.FC = () => {
             >
               Detect
             </Link>
+            <Link 
+              to="/about"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-secondary",
+                location.pathname === '/about' 
+                  ? "text-secondary" 
+                  : "text-foreground"
+              )}
+            >
+              About
+            </Link>
             
             {/* Theme Toggle */}
             <button
@@ -135,6 +146,13 @@ export const Header: React.FC = () => {
               className="text-sm font-medium py-2 hover:text-secondary transition-colors"
             >
               Detect
+            </Link>
+            <Link 
+              to="/about"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-sm font-medium py-2 hover:text-secondary transition-colors"
+            >
+              About
             </Link>
             
             {/* Theme Toggle */}

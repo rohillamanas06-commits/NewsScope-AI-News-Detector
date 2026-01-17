@@ -97,20 +97,12 @@ const Index: React.FC = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-                  <div className="flex flex-row justify-between w-full gap-3">
-                    <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-1/2 min-w-[120px] px-2 py-2.5">
-                      <Link to="/detect" className="flex items-center justify-center gap-2 px-2">
-                        <span className="truncate">Get Started</span>
-                        <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                      </Link>
-                    </Button>
-                    <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold w-1/2 min-w-[120px] px-2 py-2.5">
-                      <Link to="/learn-more" className="flex items-center justify-center gap-2 px-2">
-                        <span className="truncate">Learn More</span>
-                        <ArrowRight className="w-4 h-4 flex-shrink-0" />
-                      </Link>
-                    </Button>
-                  </div>
+                <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full sm:w-auto px-8 py-3">
+                  <Link to="/detect" className="flex items-center justify-center gap-2">
+                    <span>Get Started</span>
+                    <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                  </Link>
+                </Button>
               </div>
             </div>
 
