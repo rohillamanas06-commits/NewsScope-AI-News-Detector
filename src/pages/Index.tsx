@@ -75,22 +75,7 @@ const Index: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
         
-        {/* Animated particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-gold/30 rounded-full animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${5 + Math.random() * 5}s`
-              }}
-            />
-          ))}
-        </div>
-
+        
         <div className="container mx-auto px-4 relative z-10 pt-20">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
             {/* Left side - Text content */}
