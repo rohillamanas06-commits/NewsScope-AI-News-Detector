@@ -7,7 +7,7 @@ import {
   CheckCircle2,
   ArrowRight,
   Play,
-  Github,
+  ExternalLink,
   Instagram,
   Linkedin,
   Mail,
@@ -232,7 +232,7 @@ const About: React.FC = () => {
                       </h4>
                       <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                         <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-gray-900 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                          <Github className="h-5 w-5" />
+                          <ExternalLink className="h-5 w-5" />
                         </a>
                         <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
                           <Linkedin className="h-5 w-5" />
@@ -252,7 +252,7 @@ const About: React.FC = () => {
                     <div className="flex justify-center md:justify-start">
                       <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold">
                         <a href="https://manas-rohilla.vercel.app" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                          <Github className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4" />
                           <span>View Portfolio</span>
                         </a>
                       </Button>
