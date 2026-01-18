@@ -48,8 +48,8 @@ export const Navbar = () => {
           <span className="text-xl font-bold">NewsScope</span>
         </Link>
 
-        {/* Home Button - Absolute Center */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
+        {/* Home Button - Absolute Center - Hidden on mobile */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
           <Button variant="ghost" onClick={() => handleNavigation('/')}>
             Home
           </Button>
