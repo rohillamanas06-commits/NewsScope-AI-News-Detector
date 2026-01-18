@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Play,
   ExternalLink,
+  Github,
   Instagram,
   Linkedin,
   Mail,
@@ -232,7 +233,7 @@ const About: React.FC = () => {
                       </h4>
                       <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                         <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-gray-900 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                          <ExternalLink className="h-5 w-5" />
+                          <Github className="h-5 w-5" />
                         </a>
                         <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
                           <Linkedin className="h-5 w-5" />

@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Play,
   ExternalLink,
+  Github,
   Instagram,
   Linkedin,
   Mail,
@@ -203,7 +204,7 @@ const LearnMore: React.FC = () => {
                   <Instagram className="w-5 h-5 text-white" />
                 </a>
                 <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-800 to-gray-600 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
-                  <ExternalLink className="w-5 h-5 text-white" />
+                  <Github className="w-5 h-5 text-white" />
                 </a>
                 <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-md hover:scale-110 transition-transform">
                   <Linkedin className="w-5 h-5 text-white" />
