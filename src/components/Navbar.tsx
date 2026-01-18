@@ -67,7 +67,8 @@ export const Navbar = () => {
     <>
       <nav className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-16 items-center justify-between relative px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center space-x-2 ml-12 -ml-3 md:ml-12">
+          {/* NewsScope text/logo on the left */}
+          <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/favicon.ico" 
               alt="NewsScope Logo" 
@@ -78,20 +79,20 @@ export const Navbar = () => {
 
           {/* Home Button - Absolute Center - Hidden on mobile */}
           <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
-            <Button variant="ghost" onClick={() => handleNavigation('/')}>
+            <Button variant="ghost" onClick={() => handleNavigation('/')}> 
               Home
             </Button>
           </div>
 
-          {/* User Menu - Desktop Sidebar */}
-          <div className="hidden md:flex items-center space-x-4 mr-16">
+          {/* User Menu - Desktop Sidebar on the right */}
+          <div className="hidden md:flex items-center space-x-4">
             <Button variant="outline" size="sm" onClick={() => setIsSheetOpen(true)}>
               <Sidebar className="h-4 w-4" />
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button variant="outline" size="icon" className="md:hidden mr-16" onClick={() => setIsSheetOpen(true)}>
+          {/* Mobile Menu Button on the right */}
+          <Button variant="outline" size="icon" className="md:hidden" onClick={() => setIsSheetOpen(true)}>
             <Sidebar className="h-5 w-5" />
           </Button>
         </div>
