@@ -183,37 +183,82 @@ const About: React.FC = () => {
       </section>
 
       {/* Meet the Developer Section */}
-      <section className="py-20 md:py-24 lg:py-32 bg-background relative overflow-x-hidden">
-        <div className="container mx-auto px-4 flex flex-col items-center text-center">
-          <div className="max-w-xl mx-auto">
+      <section className="py-20 md:py-24 lg:py-32 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-x-hidden">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
             <span className="text-sm font-medium text-primary uppercase tracking-wider mb-4 block">
               Meet the Developer
             </span>
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gold/80 to-primary/80 flex items-center justify-center mb-2 shadow-lg overflow-hidden border-4 border-gold">
-                <img src="/founder.Jpg" alt="Manas Rohilla" className="object-cover w-full h-full" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">Manas Rohilla</h3>
-              <p className="text-base text-muted-foreground font-medium mb-2">Founder & Developer</p>
-              <p className="text-muted-foreground max-w-md mx-auto text-sm sm:text-base mb-4">
-                Passionate about building applications that make a difference.
-              </p>
-              <div className="flex flex-row gap-3 justify-center mt-2">
-                <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg border border-border hover:bg-gray-900 hover:text-white transition-colors">
-                  <Github className="h-5 w-5" />
-                </a>
-                <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg border border-border hover:bg-blue-600 hover:text-white transition-colors">
-                  <Linkedin className="h-5 w-5" />
-                </a>
-                <a href="https://instagram.com/manas_rohilla_" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg border border-border hover:bg-pink-600 hover:text-white transition-colors">
-                  <Instagram className="h-5 w-5" />
-                </a>
-                <a href="mailto:rohillamanas06@gmail.com" className="p-2 rounded-lg border border-border hover:bg-red-500 hover:text-white transition-colors">
-                  <Mail className="h-5 w-5" />
-                </a>
-                <a href="https://peerlist.io/rohillamanas06" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg border border-border hover:bg-purple-600 hover:text-white transition-colors">
-                  <Pilcrow className="h-5 w-5" />
-                </a>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-card/50 backdrop-blur-sm rounded-3xl shadow-2xl border border-border/50 p-8 md:p-12 relative overflow-hidden">
+              {/* Decorative background elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gold/10 to-transparent rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-2xl" />
+              
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                  {/* Profile Section */}
+                  <div className="flex flex-col items-center text-center md:text-left">
+                    <div className="mb-6">
+                      <div className="w-32 h-32 rounded-full bg-gradient-to-br from-gold/80 to-primary/80 flex items-center justify-center shadow-xl overflow-hidden border-4 border-gold/50">
+                        <img src="/founder.Jpg" alt="Manas Rohilla" className="object-cover w-full h-full" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-bold text-foreground">Manas Rohilla</h3>
+                      <p className="text-base text-muted-foreground font-medium">Founder & Developer</p>
+                    </div>
+                  </div>
+                  
+                  {/* Info Section */}
+                  <div className="flex-1 space-y-6">
+                    <div className="bg-muted/30 rounded-xl p-6 border border-border/30">
+                      <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                        <span className="w-2 h-2 bg-gold rounded-full" />
+                        About Me
+                      </h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        Passionate about building applications that make a difference. With expertise in AI/ML and modern web technologies, I create innovative solutions that solve real-world problems.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-muted/30 rounded-xl p-6 border border-border/30">
+                      <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                        <span className="w-2 h-2 bg-gold rounded-full" />
+                        Connect With Me
+                      </h4>
+                      <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                        <a href="https://github.com/rohillamanas06-commits" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-gray-900 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                          <Github className="h-5 w-5" />
+                        </a>
+                        <a href="https://www.linkedin.com/in/manas-rohilla-b73415338/" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                          <Linkedin className="h-5 w-5" />
+                        </a>
+                        <a href="https://instagram.com/manas_rohilla_" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-pink-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                          <Instagram className="h-5 w-5" />
+                        </a>
+                        <a href="mailto:rohillamanas06@gmail.com" className="group p-3 rounded-xl border border-border hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                          <Mail className="h-5 w-5" />
+                        </a>
+                        <a href="https://peerlist.io/rohillamanas06" target="_blank" rel="noopener noreferrer" className="group p-3 rounded-xl border border-border hover:bg-purple-600 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                          <Pilcrow className="h-5 w-5" />
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-center md:justify-start">
+                      <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold">
+                        <a href="https://manas-rohilla.vercel.app" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                          <Github className="w-4 h-4" />
+                          <span>View Portfolio</span>
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
