@@ -6,7 +6,7 @@ import {
   Newspaper
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Header } from '@/components/Header';
+import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { VideoModal } from '@/components/VideoModal';
 import heroBg from '@/assets/hero-bg.jpg';
@@ -64,7 +64,7 @@ const Index: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      <Header />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative py-16 md:py-0 md:min-h-screen flex items-center overflow-hidden bg-muted/30">

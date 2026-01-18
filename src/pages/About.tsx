@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { FeatureCard } from '@/components/FeatureCard';
 import { StepCard } from '@/components/StepCard';
-import { Header } from '@/components/Header';
+import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { VideoModal } from '@/components/VideoModal';
 import { useToast } from '@/hooks/use-toast';
@@ -75,7 +75,7 @@ const About: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      <Header />
+      <Navbar />
 
       {/* Section Divider */}
       <div className="container mx-auto px-4">

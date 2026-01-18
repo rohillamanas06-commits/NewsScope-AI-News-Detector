@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Header } from '@/components/Header';
+import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { AnalysisModal } from '@/components/AnalysisModal';
 import { useToast } from '@/hooks/use-toast';
@@ -104,7 +104,7 @@ const DetectPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Navbar />
 
       <main className="pt-24 pb-20">
         <div className="container mx-auto px-4">

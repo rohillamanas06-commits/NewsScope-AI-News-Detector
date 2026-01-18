@@ -65,54 +65,10 @@ export const Header: React.FC = () => {
               alt="NewsScope Logo" 
               className="w-8 h-8 md:w-9 md:h-9"
             />
-            <span className="font-display text-xl md:text-2xl font-bold text-foreground">
-              NewsScope
-            </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Empty */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link 
-              to="/"
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-secondary",
-                location.pathname === '/' 
-                  ? "text-secondary" 
-                  : "text-foreground"
-              )}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/detect"
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-secondary",
-                location.pathname === '/detect' 
-                  ? "text-secondary" 
-                  : "text-foreground"
-              )}
-            >
-              Detect
-            </Link>
-            <Link 
-              to="/about"
-              className={cn(
-                "text-sm font-medium transition-colors hover:text-secondary",
-                location.pathname === '/about' 
-                  ? "text-secondary" 
-                  : "text-foreground"
-              )}
-            >
-              About
-            </Link>
-            
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="w-9 h-9 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-all hover:scale-110 border border-border"
-            >
-              <Palette className="w-4 h-4 text-foreground" />
-            </button>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -129,40 +85,10 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Empty */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed top-16 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border animate-slide-down">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-            <Link 
-              to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-medium py-2 hover:text-secondary transition-colors"
-            >
-              Home
-            </Link>
-            <Link 
-              to="/detect"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-medium py-2 hover:text-secondary transition-colors"
-            >
-              Detect
-            </Link>
-            <Link 
-              to="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-medium py-2 hover:text-secondary transition-colors"
-            >
-              About
-            </Link>
-            
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="w-full py-3 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-all border border-border text-2xl"
-              title="Toggle Theme"
-            >
-              🎨
-            </button>
           </div>
         </div>
       )}
