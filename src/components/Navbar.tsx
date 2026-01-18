@@ -67,7 +67,7 @@ export const Navbar = () => {
     <>
       <nav className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-16 items-center justify-between relative px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center space-x-2 ml-6">
+          <Link to="/" className="flex items-center space-x-2 ml-12 -ml-3 md:ml-12">
             <img 
               src="/favicon.ico" 
               alt="NewsScope Logo" 
