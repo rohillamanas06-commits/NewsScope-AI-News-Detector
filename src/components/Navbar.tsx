@@ -14,38 +14,48 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const isMobile = useIsMobile();
 
-  React.useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      body {
-        overflow-x: hidden !important;
-        position: relative !important;
-      }
-      html {
-        overflow-x: hidden !important;
-      }
-      [data-radix-scroll-lock] {
-        padding-right: 0 !important;
-      }
-      body[data-radix-scroll-lock] {
-        overflow: visible !important;
-        padding-right: 0 !important;
-      }
-    `;
-    document.head.appendChild(style);
-    
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
+  // Lock body scroll on mobile when sidebar is open
+  useEffect(() => {
+    if (isMobile && isSheetOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100vh';
+      document.body.style.touchAction = 'none';
+      document.body.style.pointerEvents = 'none';
+      document.body.style.webkitUserSelect = 'none';
+      document.body.style.userSelect = 'none';
+      return () => {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.height = '';
+        document.body.style.touchAction = '';
+        document.body.style.pointerEvents = '';
+        document.body.style.webkitUserSelect = '';
+        document.body.style.userSelect = '';
+      };
+    }
+    // Always clean up if not open
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.height = '';
+    document.body.style.touchAction = '';
+    document.body.style.pointerEvents = '';
+    document.body.style.webkitUserSelect = '';
+    document.body.style.userSelect = '';
+  }, [isMobile, isSheetOpen]);
 
   const handleLogout = async () => {
     await logout();

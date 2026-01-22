@@ -75,7 +75,7 @@ const SidebarProvider = React.forwardRef<
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
   }, [isMobile, setOpen, setOpenMobile]);
 
-  // Adds a keyboard shortcut to toggle the sidebar.
+  // Adds a keyboard shortcut to toggle sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -87,6 +87,82 @@ const SidebarProvider = React.forwardRef<
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar]);
+
+  // Prevent body scroll when mobile sidebar is open
+  React.useEffect(() => {
+    // More aggressive mobile detection
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                       (window.innerWidth < 768 && 'ontouchstart' in window);
+    
+    if (isMobileDevice && openMobile) {
+      console.log('🔒 COMPLETE MOBILE LOCKDOWN');
+      
+      // Create multiple blocking layers
+      const createBlocker = (zIndex: number, pointerEvents: string = 'none') => {
+        const blocker = document.createElement('div');
+        blocker.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          z-index: ${zIndex} !important;
+          background: rgba(0, 0, 0, ${zIndex === 99999 ? '0.95' : '0.8'}) !important;
+          backdrop-filter: blur(${zIndex === 99999 ? '12px' : '8px'}) !important;
+          -webkit-backdrop-filter: blur(${zIndex === 99999 ? '12px' : '8px'}) !important;
+          touch-action: ${pointerEvents} !important;
+          pointer-events: ${pointerEvents} !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+          overflow: hidden !important;
+        `;
+        return blocker;
+      };
+      
+      // Layer 1: Complete interaction block
+      const interactionBlocker = createBlocker(99999, 'none');
+      
+      // Layer 2: Visual backdrop with click to close
+      const backdropBlocker = createBlocker(99998, 'auto');
+      backdropBlocker.addEventListener('click', () => setOpenMobile(false));
+      
+      // Layer 3: Additional safety layer
+      const safetyBlocker = createBlocker(99997, 'none');
+      
+      // Apply all blockers
+      document.body.appendChild(interactionBlocker);
+      document.body.appendChild(backdropBlocker);
+      document.body.appendChild(safetyBlocker);
+      
+      // Also lock body directly
+      document.body.style.cssText = `
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100vh !important;
+        touch-action: none !important;
+        pointer-events: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+      `;
+      
+      return () => {
+        console.log('🔓 UNLOCKING MOBILE');
+        
+        // Remove all blockers
+        [interactionBlocker, backdropBlocker, safetyBlocker].forEach(blocker => {
+          if (document.body.contains(blocker)) {
+            document.body.removeChild(blocker);
+          }
+        });
+        
+        // Reset body
+        document.body.style.cssText = '';
+      };
+    }
+  }, [isMobile, openMobile]);
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
@@ -120,6 +196,31 @@ const SidebarProvider = React.forwardRef<
           ref={ref}
           {...props}
         >
+          {/* Mobile backdrop blur */}
+          {isMobile && openMobile && (
+            <>
+              <div 
+                className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md md:hidden"
+                onClick={() => setOpenMobile(false)}
+                style={{ 
+                  position: 'fixed',
+                  top: '0',
+                  left: '0',
+                  right: '0',
+                  bottom: '0'
+                }}
+              />
+              {/* Additional overlay to catch any missed interactions */}
+              <div 
+                className="fixed inset-0 z-[9998] md:hidden"
+                style={{ 
+                  backgroundColor: 'transparent',
+                  touchAction: 'none',
+                  pointerEvents: 'none'
+                }}
+              />
+            </>
+          )}
           {children}
         </div>
       </TooltipProvider>
