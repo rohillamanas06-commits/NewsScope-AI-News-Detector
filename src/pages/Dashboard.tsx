@@ -319,25 +319,25 @@ const Dashboard: React.FC = () => {
                   Recent Analyses
                 </CardTitle>
                 {recentAnalyses.length > 0 && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setDeleteAllDialogOpen(true)}
-                      className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto text-xs sm:text-sm"
                     >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Delete All
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                      <span className="truncate">Delete All</span>
                     </Button>
                     {selectedAnalyses.length > 0 && (
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setDeleteDialogOpen(true)}
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto text-xs sm:text-sm"
                       >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Delete Selected ({selectedAnalyses.length})
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                        <span className="truncate">Delete ({selectedAnalyses.length})</span>
                       </Button>
                     )}
                   </div>
