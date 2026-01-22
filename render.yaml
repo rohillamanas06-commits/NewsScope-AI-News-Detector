@@ -3,7 +3,7 @@ services:
     name: newsscope-api
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn NewsScope:app
+    startCommand: gunicorn NewsScope:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
@@ -15,3 +15,9 @@ services:
         sync: false
       - key: SENDGRID_TO_EMAIL
         sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: FLASK_ENV
+        value: production
