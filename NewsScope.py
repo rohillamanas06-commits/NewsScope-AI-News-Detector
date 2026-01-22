@@ -27,9 +27,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
-app.config['SESSION_COOKIE_SECURE'] = False  # Allow for local development
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'  # HTTPS only in production
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # More compatible for local development
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Required for cross-origin cookies
+app.config['SESSION_COOKIE_DOMAIN'] = None  # Allow cross-domain cookies
 
 # Initialize extensions
 db.init_app(app)
@@ -37,7 +38,11 @@ Session(app)
 
 # Enable CORS with credentials
 CORS(app, 
-     resources={r"/api/*": {"origins": ['http://localhost:8080', 'https://newsscope-ai-news-detector.vercel.app']}},
+     resources={r"/api/*": {"origins": [
+       'http://localhost:8080', 
+       'https://newsscope-ai-news-detector.vercel.app',
+       'http://localhost:3000'
+     ]}},
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
