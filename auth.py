@@ -204,10 +204,10 @@ def login():
         }), 500
 
 @auth_bp.route('/logout', methods=['POST'])
-@login_required
 def logout():
     """User logout endpoint"""
-    session.pop('user_id', None)
+    # Clear session regardless of authentication status
+    session.clear()
     return jsonify({
         'success': True,
         'message': 'Logged out successfully'
