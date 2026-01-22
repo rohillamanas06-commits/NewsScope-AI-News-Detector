@@ -98,7 +98,7 @@ const Index: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
                 <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full sm:w-auto px-8 py-3">
-                  <Link to="/detect" className="flex items-center justify-center gap-2">
+                  <Link to="/dashboard" className="flex items-center justify-center gap-2">
                     <span>Get Started</span>
                     <ArrowRight className="w-4 h-4 flex-shrink-0" />
                   </Link>

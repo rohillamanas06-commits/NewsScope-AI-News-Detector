@@ -1,35 +1,62 @@
 import os
 import json
 import requests
-from datetime import datetime
-from flask import Flask, request, jsonify
+from datetime import datetime, timedelta
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
+from flask_session import Session
 import google.generativeai as genai
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+
+# Import database models and auth
+from models import db, User, AnalysisHistory
+from auth import auth_bp, login_required
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"], "allow_headers": ["Content-Type"]}})  # Enable CORS for frontend integration
+
+# Configuration
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+# Initialize extensions
+db.init_app(app)
+Session(app)
+
+# Enable CORS with credentials
+CORS(app, 
+     resources={r"/api/*": {"origins": os.getenv('FRONTEND_URL', 'http://localhost:8080')}},
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+
+# Register auth blueprint
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
 # Configure Gemini API
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not found in environment variables")
 
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel('gemini-2.5-flash')
+
 # Configure SendGrid API
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 SENDGRID_FROM_EMAIL = os.getenv('SENDGRID_FROM_EMAIL', 'noreply@newsscope.com')
 SENDGRID_TO_EMAIL = os.getenv('SENDGRID_TO_EMAIL', 'rohillamanas06@gmail.com')
-
-genai.configure(api_key=GEMINI_API_KEY)
-
-# Initialize Gemini model
-model = genai.GenerativeModel('gemini-2.5-flash')
 
 
 class NewsAnalyzer:
@@ -39,10 +66,7 @@ class NewsAnalyzer:
         self.sources_checked = []
     
     def search_news_sources(self, news_text, headline=""):
-        """
-        Simulate searching multiple news sources for verification
-        In production, you would integrate with real news APIs
-        """
+        """Simulate searching multiple news sources for verification"""
         sources = [
             {
                 "name": "Associated Press (AP)",
@@ -110,11 +134,8 @@ class NewsAnalyzer:
         return sources
     
     def analyze_with_gemini(self, news_text, headline=""):
-        """
-        Use Gemini AI to analyze the news for authenticity
-        """
+        """Use Gemini AI to analyze the news for authenticity"""
         try:
-            # Create detailed prompt for Gemini
             prompt = f"""
 You are an expert fact-checker and news analyst. Analyze the following news article for authenticity.
 
@@ -155,14 +176,10 @@ Format your response as JSON with the following structure:
 }}
 """
             
-            # Generate response from Gemini
             response = model.generate_content(prompt)
-            
-            # Parse the response
             response_text = response.text.strip()
             
             # Try to extract JSON from the response
-            # Gemini might wrap JSON in markdown code blocks
             if "```json" in response_text:
                 json_start = response_text.find("```json") + 7
                 json_end = response_text.find("```", json_start)
@@ -175,7 +192,6 @@ Format your response as JSON with the following structure:
             try:
                 analysis_result = json.loads(response_text)
             except json.JSONDecodeError:
-                # If JSON parsing fails, create a structured response from text
                 analysis_result = {
                     "verdict": self._extract_verdict(response_text),
                     "confidence": 70,
@@ -202,17 +218,11 @@ Format your response as JSON with the following structure:
             return "REAL"
         return "UNCERTAIN"
     
-    def generate_report(self, news_text, headline=""):
-        """
-        Generate a comprehensive fake news detection report
-        """
-        # Search sources
+    def generate_report(self, news_text, headline="", user_id=None):
+        """Generate a comprehensive fake news detection report"""
         sources = self.search_news_sources(news_text, headline)
-        
-        # Analyze with Gemini AI
         ai_analysis = self.analyze_with_gemini(news_text, headline)
         
-        # Compile final report
         report = {
             "timestamp": datetime.now().isoformat(),
             "headline": headline,
@@ -229,6 +239,27 @@ Format your response as JSON with the following structure:
             "ai_model": "Google Gemini 2.5 Flash"
         }
         
+        # Save to database if user is logged in
+        if user_id:
+            try:
+                analysis_record = AnalysisHistory(
+                    user_id=user_id,
+                    headline=headline,
+                    news_text=news_text,
+                    verdict=report['verdict'],
+                    confidence=report['confidence'],
+                    summary=report['summary'],
+                    detailed_analysis=report['detailed_analysis'],
+                    red_flags=report['red_flags'],
+                    key_claims=report['key_claims'],
+                    sources_checked=sources
+                )
+                db.session.add(analysis_record)
+                db.session.commit()
+            except Exception as e:
+                print(f"Error saving analysis: {str(e)}")
+                db.session.rollback()
+        
         return report
 
 
@@ -242,12 +273,20 @@ def home():
     """Home endpoint"""
     return jsonify({
         "service": "NewsScope API",
-        "version": "1.0.0",
-        "description": "AI-Based Fake News Detector",
+        "version": "2.0.0",
+        "description": "AI-Based Fake News Detector with Authentication",
         "endpoints": {
             "/": "API information",
             "/api/health": "Health check",
-            "/api/analyze": "Analyze news (POST)"
+            "/api/auth/signup": "User registration",
+            "/api/auth/login": "User login",
+            "/api/auth/logout": "User logout",
+            "/api/auth/me": "Get current user",
+            "/api/auth/forgot-password": "Request password reset",
+            "/api/auth/reset-password": "Reset password",
+            "/api/analyze": "Analyze news (requires authentication)",
+            "/api/history": "Get analysis history (requires authentication)",
+            "/api/dashboard": "Get dashboard statistics (requires authentication)"
         }
     })
 
@@ -258,23 +297,16 @@ def health_check():
     return jsonify({
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "gemini_api_configured": bool(GEMINI_API_KEY)
+        "gemini_api_configured": bool(GEMINI_API_KEY),
+        "database_connected": db.engine.url.database is not None
     })
 
 
 @app.route('/api/analyze', methods=['POST'])
+@login_required
 def analyze_news():
-    """
-    Main endpoint to analyze news for authenticity
-    
-    Expected JSON payload:
-    {
-        "headline": "News headline (optional)",
-        "text": "Full news article text"
-    }
-    """
+    """Main endpoint to analyze news for authenticity (requires authentication)"""
     try:
-        # Get request data
         data = request.get_json()
         
         if not data:
@@ -286,15 +318,17 @@ def analyze_news():
         news_text = data.get('text', '')
         headline = data.get('headline', '')
         
-        # Validate input
         if not news_text or len(news_text.strip()) < 10:
             return jsonify({
                 "error": "Invalid input",
                 "message": "News text must be at least 10 characters long"
             }), 400
         
+        # Get user_id from session
+        user_id = session.get('user_id')
+        
         # Generate analysis report
-        report = analyzer.generate_report(news_text, headline)
+        report = analyzer.generate_report(news_text, headline, user_id)
         
         return jsonify({
             "success": True,
@@ -309,63 +343,85 @@ def analyze_news():
         }), 500
 
 
-@app.route('/api/batch-analyze', methods=['POST'])
-def batch_analyze():
-    """
-    Analyze multiple news articles at once
-    
-    Expected JSON payload:
-    {
-        "articles": [
-            {"headline": "...", "text": "..."},
-            {"headline": "...", "text": "..."}
-        ]
-    }
-    """
+@app.route('/api/history', methods=['GET'])
+@login_required
+def get_history():
+    """Get user's analysis history"""
     try:
-        data = request.get_json()
+        user_id = session.get('user_id')
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
         
-        if not data or 'articles' not in data:
-            return jsonify({
-                "error": "Invalid request",
-                "message": "Please provide 'articles' array"
-            }), 400
-        
-        articles = data.get('articles', [])
-        
-        if len(articles) > 10:
-            return jsonify({
-                "error": "Too many articles",
-                "message": "Maximum 10 articles per batch request"
-            }), 400
-        
-        results = []
-        for article in articles:
-            try:
-                report = analyzer.generate_report(
-                    article.get('text', ''),
-                    article.get('headline', '')
-                )
-                results.append({
-                    "success": True,
-                    "data": report
-                })
-            except Exception as e:
-                results.append({
-                    "success": False,
-                    "error": str(e)
-                })
+        # Query with pagination
+        pagination = AnalysisHistory.query.filter_by(user_id=user_id)\
+            .order_by(AnalysisHistory.timestamp.desc())\
+            .paginate(page=page, per_page=per_page, error_out=False)
         
         return jsonify({
             "success": True,
-            "total": len(results),
-            "results": results
+            "history": [item.to_dict() for item in pagination.items],
+            "total": pagination.total,
+            "page": page,
+            "pages": pagination.pages,
+            "per_page": per_page
         }), 200
         
     except Exception as e:
         return jsonify({
             "success": False,
-            "error": "Batch analysis failed",
+            "error": "Failed to fetch history",
+            "message": str(e)
+        }), 500
+
+
+@app.route('/api/dashboard', methods=['GET'])
+@login_required
+def get_dashboard():
+    """Get dashboard statistics"""
+    try:
+        user_id = session.get('user_id')
+        
+        # Get all analyses for the user
+        analyses = AnalysisHistory.query.filter_by(user_id=user_id).all()
+        
+        # Calculate statistics
+        total_analyses = len(analyses)
+        
+        verdict_counts = {
+            'REAL': 0,
+            'FAKE': 0,
+            'MISLEADING': 0,
+            'UNCERTAIN': 0
+        }
+        
+        for analysis in analyses:
+            verdict = analysis.verdict.upper()
+            if verdict in verdict_counts:
+                verdict_counts[verdict] += 1
+        
+        # Get recent analyses
+        recent_analyses = AnalysisHistory.query.filter_by(user_id=user_id)\
+            .order_by(AnalysisHistory.timestamp.desc())\
+            .limit(5)\
+            .all()
+        
+        # Get last analysis timestamp
+        last_analysis = recent_analyses[0] if recent_analyses else None
+        
+        return jsonify({
+            "success": True,
+            "statistics": {
+                "total_analyses": total_analyses,
+                "verdict_distribution": verdict_counts,
+                "last_analysis": last_analysis.timestamp.isoformat() if last_analysis else None
+            },
+            "recent_analyses": [item.to_dict() for item in recent_analyses]
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": "Failed to fetch dashboard data",
             "message": str(e)
         }), 500
 
@@ -381,36 +437,78 @@ def get_sources():
     })
 
 
-# Error handlers
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({
-        "error": "Not found",
-        "message": "The requested endpoint does not exist"
-    }), 404
+@app.route('/api/history/<int:analysis_id>', methods=['DELETE'])
+@login_required
+def delete_analysis(analysis_id):
+    """Delete a specific analysis"""
+    try:
+        user_id = session.get('user_id')
+        
+        # Find the analysis belonging to the user
+        analysis = AnalysisHistory.query.filter_by(id=analysis_id, user_id=user_id).first()
+        
+        if not analysis:
+            return jsonify({
+                'success': False,
+                'error': 'Analysis not found',
+                'message': 'The analysis you are trying to delete does not exist'
+            }), 404
+        
+        # Delete the analysis
+        db.session.delete(analysis)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Analysis deleted successfully'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"Delete analysis error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to delete analysis',
+            'message': 'An error occurred while deleting the analysis'
+        }), 500
 
 
-@app.errorhandler(500)
-def internal_error(error):
-    return jsonify({
-        "error": "Internal server error",
-        "message": "An unexpected error occurred"
-    }), 500
+@app.route('/api/history', methods=['DELETE'])
+@login_required
+def delete_all_analyses():
+    """Delete all analyses for the user"""
+    try:
+        user_id = session.get('user_id')
+        
+        # Delete all analyses for the user
+        deleted_count = AnalysisHistory.query.filter_by(user_id=user_id).count()
+        AnalysisHistory.query.filter_by(user_id=user_id).delete()
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': f'Successfully deleted {deleted_count} analyses'
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"Delete all analyses error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to delete analyses',
+            'message': 'An error occurred while deleting your analyses'
+        }), 500
 
 
 @app.route('/api/feedback', methods=['POST', 'OPTIONS'])
 def send_feedback():
-    """
-    Send feedback via SendGrid email
-    """
-    # Handle preflight OPTIONS request
+    """Send feedback via SendGrid email"""
     if request.method == 'OPTIONS':
         return '', 204
     
     try:
         data = request.get_json()
         
-        # Validate required fields
         if not data or not all(k in data for k in ['name', 'email', 'message']):
             return jsonify({
                 "success": False,
@@ -421,16 +519,13 @@ def send_feedback():
         email = data.get('email')
         feedback_message = data.get('message')
         
-        # Check if SendGrid is configured
         if not SENDGRID_API_KEY:
-            # If SendGrid not configured, just log and return success
             print(f"Feedback received from {name} ({email}): {feedback_message}")
             return jsonify({
                 "success": True,
                 "message": "Feedback received (SendGrid not configured)"
             })
         
-        # Create email content
         html_content = f"""
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -450,7 +545,6 @@ def send_feedback():
         </html>
         """
         
-        # Create SendGrid message
         mail_message = Mail(
             from_email=SENDGRID_FROM_EMAIL,
             to_emails=SENDGRID_TO_EMAIL,
@@ -458,7 +552,6 @@ def send_feedback():
             html_content=html_content
         )
         
-        # Send email
         sg = SendGridAPIClient(SENDGRID_API_KEY)
         response = sg.send(mail_message)
         
@@ -476,18 +569,41 @@ def send_feedback():
         }), 500
 
 
+# Error handlers
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "error": "Not found",
+        "message": "The requested endpoint does not exist"
+    }), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return jsonify({
+        "error": "Internal server error",
+        "message": "An unexpected error occurred"
+    }), 500
+
+
+# Initialize database
+with app.app_context():
+    db.create_all()
+    print("Database tables created successfully!")
+
 if __name__ == '__main__':
     print("=" * 50)
-    print("NewsScope - AI Fake News Detector")
+    print("NewsScope - AI Fake News Detector v2.0")
     print("=" * 50)
     print(f"API Key Configured: {bool(GEMINI_API_KEY)}")
     
-    # Get port from environment variable for cloud deployment
+    with app.app_context():
+        print(f"Database Connected: {db.engine.url.database}")
+    
     port = int(os.getenv('PORT', 5000))
     print(f"Starting server on port {port}")
     print("=" * 50)
     
-    # Run Flask app
     app.run(
         host='0.0.0.0',
         port=port,

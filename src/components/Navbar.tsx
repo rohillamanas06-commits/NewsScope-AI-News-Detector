@@ -1,5 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { FileText, LogOut, User, Menu, Settings, Moon, Sun, Flame, Info, Sidebar, Edit, Search, Wrench } from 'lucide-react';
+import { 
+  LogOut, 
+  User, 
+  Menu, 
+  Settings, 
+  Search, 
+  Info, 
+  Sidebar,
+  LayoutDashboard,
+  LogIn
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -7,12 +17,11 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState } from 'react';
 
 export const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  // Add global styles to prevent layout shift
   React.useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -23,7 +32,6 @@ export const Navbar = () => {
       html {
         overflow-x: hidden !important;
       }
-      /* Prevent content shift when modal opens */
       [data-radix-scroll-lock] {
         padding-right: 0 !important;
       }
@@ -50,24 +58,11 @@ export const Navbar = () => {
     setIsSheetOpen(false);
   };
 
-  const getThemeIcon = () => {
-    if (theme === 'brown') return <Moon className="h-4 w-4 mr-2" />;
-    if (theme === 'green') return <Flame className="h-4 w-4 mr-2" />;
-    return <Sun className="h-4 w-4 mr-2" />;
-  };
-
-  const getThemeLabel = () => {
-    if (theme === 'brown') return 'Green Mode';
-    if (theme === 'green') return 'Purple Mode';
-    return 'Brown Mode';
-  };
-
-  
   return (
     <>
       <nav className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-16 items-center justify-between relative px-4 sm:px-6 lg:px-8">
-          {/* NewsScope text/logo on the left */}
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/favicon.ico" 
@@ -77,66 +72,116 @@ export const Navbar = () => {
             <span className="text-xl font-bold">NewsScope</span>
           </Link>
 
-          {/* Home Button - Absolute Center - Hidden on mobile */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:block">
+          {/* Center - Navigation Buttons (Hidden on mobile) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center gap-2">
             <Button variant="ghost" onClick={() => handleNavigation('/')}> 
               Home
             </Button>
           </div>
 
-          {/* User Menu - Desktop Sidebar on the right */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="sm" onClick={() => setIsSheetOpen(true)}>
-              <Sidebar className="h-4 w-4" />
+          {/* Right Side - Auth State */}
+          <div className="flex items-center gap-2">
+            {/* Always show sidebar menu button */}
+            <div className="hidden md:flex items-center gap-3">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsSheetOpen(true)}
+              >
+                <Sidebar className="h-4 w-4" />
+              </Button>
+            </div>
+            {/* Mobile: Menu Button */}
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="md:hidden" 
+              onClick={() => setIsSheetOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
             </Button>
           </div>
-
-          {/* Mobile Menu Button on the right */}
-          <Button variant="outline" size="icon" className="md:hidden" onClick={() => setIsSheetOpen(true)}>
-            <Sidebar className="h-5 w-5" />
-          </Button>
         </div>
       </nav>
 
-      {/* Sidebar - Both Desktop and Mobile - Rendered outside navbar */}
+      {/* Sidebar */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} modal={false}>
-        {/* Custom overlay to replicate exact original effect */}
         {isSheetOpen && (
           <div 
             className="fixed inset-0 z-50 bg-black/80 animate-in fade-in-0 duration-300" 
             onClick={() => setIsSheetOpen(false)}
           />
         )}
-        <SheetContent side="right" className="bg-background z-[60] w-80">
-          <div className="flex flex-col space-y-4 mt-8">
-            <Button variant="outline" onClick={() => handleNavigation('/detect')}>
-              <Search className="h-4 w-4 mr-2" />
-              Detect
-            </Button>
-            <Button variant="outline" onClick={toggleTheme}>
-              {getThemeIcon()}
-              {getThemeLabel()}
-            </Button>
-            <Button variant="outline" onClick={() => handleNavigation('/about')}>
-              <Info className="h-4 w-4 mr-2" />
-              About
-            </Button>
-            {user && (
-              <>
-                <Button variant="outline" onClick={() => handleNavigation('/profile')}>
-                  <User className="h-4 w-4 mr-2" />
-                  Profile
+        <SheetContent side="right" className="bg-background z-[60] w-80 shadow-2xl" style={{ padding: 0 }}>
+          <div className="flex flex-col h-full pt-12 px-4">
+            {/* Top Section - Auth Buttons (always visible) */}
+            <div className="pb-6 border-b border-border/50">
+              <div className="space-y-3">
+                {!isAuthenticated ? (
+                  <>
+                    <Button variant="default" onClick={() => handleNavigation('/login')} className="w-full h-11 font-medium">
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Login
+                    </Button>
+                    <Button variant="outline" onClick={() => handleNavigation('/signup')} className="w-full h-11 font-medium">
+                      Sign Up
+                    </Button>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-xl border border-border/30">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-base truncate">{user.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Middle Section - Navigation & Theme */}
+            <div className="flex-1 py-6 space-y-2">
+              {isAuthenticated && (
+                <>
+                  <Button variant="ghost" onClick={() => handleNavigation('/dashboard')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                    <LayoutDashboard className="h-4 w-4 mr-3" />
+                    Dashboard
+                  </Button>
+                  <Button variant="ghost" onClick={() => handleNavigation('/detect')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                    <Search className="h-4 w-4 mr-3" />
+                    Detect News
+                  </Button>
+                </>
+              )}
+              <Button variant="ghost" onClick={toggleTheme} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                <Settings className="h-4 w-4 mr-3" />
+                Change Theme
+              </Button>
+              {!isAuthenticated && (
+                <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                  <Info className="h-4 w-4 mr-3" />
+                  About
                 </Button>
-                <Button variant="outline" onClick={() => handleNavigation('/settings')}>
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
+              )}
+            </div>
+
+            {/* Bottom Section - About (only for authenticated users) */}
+            <div className="pt-6 border-t border-border/50">
+              {isAuthenticated && (
+                <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                  <Info className="h-4 w-4 mr-3" />
+                  About
                 </Button>
-                <Button variant="outline" onClick={handleLogout}>
-                  <LogOut className="h-4 w-4 mr-2" />
+              )}
+              {isAuthenticated && (
+                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive mt-2">
+                  <LogOut className="h-4 w-4 mr-3" />
                   Logout
                 </Button>
-              </>
-            )}
+              )}
+            </div>
           </div>
         </SheetContent>
       </Sheet>

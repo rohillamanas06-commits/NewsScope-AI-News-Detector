@@ -1,12 +1,72 @@
 /**
- * API Service for NewsScope Backend
- * Connects frontend to Flask backend
+ * Complete API Service for NewsScope
+ * Handles all backend communication including authentication
  */
-
-// VITE_API_URL is provided by Vite's ImportMetaEnv type; no need to redeclare ImportMeta or ImportMetaEnv here.
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+// Helper function for API calls
+async function apiCall(endpoint: string, options: RequestInit = {}) {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    credentials: 'include', // Important for session cookies
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || data.error || 'Request failed');
+  }
+
+  return data;
+}
+
+// Authentication API
+export const authApi = {
+  async signup(name: string, email: string, password: string) {
+    return apiCall('/api/auth/signup', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password }),
+    });
+  },
+
+  async login(email: string, password: string) {
+    return apiCall('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+  },
+
+  async logout() {
+    return apiCall('/api/auth/logout', {
+      method: 'POST',
+    });
+  },
+
+  async getCurrentUser() {
+    return apiCall('/api/auth/me');
+  },
+
+  async forgotPassword(email: string) {
+    return apiCall('/api/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  async resetPassword(token: string, password: string) {
+    return apiCall('/api/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password }),
+    });
+  },
+};
+
+// News Analysis API
 export interface AnalyzeRequest {
   text: string;
   headline?: string;
@@ -38,117 +98,56 @@ export interface AnalyzeResponse {
   message?: string;
 }
 
-export interface SourcesResponse {
-  success: boolean;
-  total_sources: number;
-  sources: Array<{
-    name: string;
-    url: string;
-    credibility: string;
-    checked: boolean;
-  }>;
-}
+export const newsApi = {
+  async healthCheck() {
+    return apiCall('/api/health');
+  },
 
-export interface HealthResponse {
-  status: string;
-  timestamp: string;
-  gemini_api_configured: boolean;
-}
-
-class NewsApiService {
-  private baseUrl: string;
-
-  constructor(baseUrl: string = API_BASE_URL) {
-    this.baseUrl = baseUrl;
-  }
-
-  /**
-   * Check if the backend is healthy and running
-   */
-  async healthCheck(): Promise<HealthResponse> {
-    try {
-      const response = await fetch(`${this.baseUrl}/api/health`);
-      if (!response.ok) {
-        throw new Error('Backend is not responding');
-      }
-      return await response.json();
-    } catch (error) {
-      throw new Error(`Failed to connect to backend: ${error}`);
-    }
-  }
-
-  /**
-   * Analyze a news article for fake news detection
-   */
   async analyzeNews(data: AnalyzeRequest): Promise<AnalyzeResponse> {
-    try {
-      const response = await fetch(`${this.baseUrl}/api/analyze`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    return apiCall('/api/analyze', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Analysis failed');
-      }
+  async getSources() {
+    return apiCall('/api/sources');
+  },
 
-      return await response.json();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Failed to analyze news');
-    }
-  }
+  async sendFeedback(name: string, email: string, message: string) {
+    return apiCall('/api/feedback', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, message }),
+    });
+  },
+};
 
-  /**
-   * Get list of sources checked by the system
-   */
-  async getSources(): Promise<SourcesResponse> {
-    try {
-      const response = await fetch(`${this.baseUrl}/api/sources`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch sources');
-      }
-      return await response.json();
-    } catch (error) {
-      throw new Error(`Failed to fetch sources: ${error}`);
-    }
-  }
+// Dashboard API
+export const dashboardApi = {
+  async getStats() {
+    return apiCall('/api/dashboard');
+  },
 
-  /**
-   * Analyze multiple articles at once
-   */
-  async batchAnalyze(articles: AnalyzeRequest[]): Promise<any> {
-    try {
-      const response = await fetch(`${this.baseUrl}/api/batch-analyze`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ articles }),
-      });
+  async getHistory(page: number = 1, perPage: number = 10) {
+    return apiCall(`/api/history?page=${page}&per_page=${perPage}`);
+  },
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Batch analysis failed');
-      }
+  async deleteAnalysis(analysisId: number) {
+    return apiCall(`/api/history/${analysisId}`, {
+      method: 'DELETE',
+    });
+  },
 
-      return await response.json();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error('Failed to perform batch analysis');
-    }
-  }
-}
+  async deleteAllAnalyses() {
+    return apiCall('/api/history', {
+      method: 'DELETE',
+    });
+  },
+};
 
-// Export singleton instance
-export const newsApi = new NewsApiService();
-
-// Export class for custom instances
-export default NewsApiService;
+// Export all APIs
+export default {
+  auth: authApi,
+  news: newsApi,
+  dashboard: dashboardApi,
+};
