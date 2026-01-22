@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -88,78 +87,21 @@ const SidebarProvider = React.forwardRef<
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar]);
 
-  // Prevent body scroll when mobile sidebar is open
+  // Prevent body scroll when mobile sidebar is open - simplified approach
   React.useEffect(() => {
-    // More aggressive mobile detection
-    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                       (window.innerWidth < 768 && 'ontouchstart' in window);
-    
-    if (isMobileDevice && openMobile) {
-      console.log('🔒 COMPLETE MOBILE LOCKDOWN');
-      
-      // Create multiple blocking layers
-      const createBlocker = (zIndex: number, pointerEvents: string = 'none') => {
-        const blocker = document.createElement('div');
-        blocker.style.cssText = `
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          bottom: 0 !important;
-          width: 100vw !important;
-          height: 100vh !important;
-          z-index: ${zIndex} !important;
-          background: rgba(0, 0, 0, ${zIndex === 99999 ? '0.95' : '0.8'}) !important;
-          backdrop-filter: blur(${zIndex === 99999 ? '12px' : '8px'}) !important;
-          -webkit-backdrop-filter: blur(${zIndex === 99999 ? '12px' : '8px'}) !important;
-          touch-action: ${pointerEvents} !important;
-          pointer-events: ${pointerEvents} !important;
-          -webkit-user-select: none !important;
-          user-select: none !important;
-          overflow: hidden !important;
-        `;
-        return blocker;
-      };
-      
-      // Layer 1: Complete interaction block
-      const interactionBlocker = createBlocker(99999, 'none');
-      
-      // Layer 2: Visual backdrop with click to close
-      const backdropBlocker = createBlocker(99998, 'auto');
-      backdropBlocker.addEventListener('click', () => setOpenMobile(false));
-      
-      // Layer 3: Additional safety layer
-      const safetyBlocker = createBlocker(99997, 'none');
-      
-      // Apply all blockers
-      document.body.appendChild(interactionBlocker);
-      document.body.appendChild(backdropBlocker);
-      document.body.appendChild(safetyBlocker);
-      
-      // Also lock body directly
-      document.body.style.cssText = `
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100vh !important;
-        touch-action: none !important;
-        pointer-events: none !important;
-        -webkit-user-select: none !important;
-        user-select: none !important;
-      `;
+    if (isMobile && openMobile) {
+      // Simple body scroll lock without blocking pointer events
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100vh';
       
       return () => {
-        console.log('🔓 UNLOCKING MOBILE');
-        
-        // Remove all blockers
-        [interactionBlocker, backdropBlocker, safetyBlocker].forEach(blocker => {
-          if (document.body.contains(blocker)) {
-            document.body.removeChild(blocker);
-          }
-        });
-        
-        // Reset body
-        document.body.style.cssText = '';
+        // Reset body styles
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.height = '';
       };
     }
   }, [isMobile, openMobile]);
@@ -196,31 +138,6 @@ const SidebarProvider = React.forwardRef<
           ref={ref}
           {...props}
         >
-          {/* Mobile backdrop blur */}
-          {isMobile && openMobile && (
-            <>
-              <div 
-                className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-md md:hidden"
-                onClick={() => setOpenMobile(false)}
-                style={{ 
-                  position: 'fixed',
-                  top: '0',
-                  left: '0',
-                  right: '0',
-                  bottom: '0'
-                }}
-              />
-              {/* Additional overlay to catch any missed interactions */}
-              <div 
-                className="fixed inset-0 z-[9998] md:hidden"
-                style={{ 
-                  backgroundColor: 'transparent',
-                  touchAction: 'none',
-                  pointerEvents: 'none'
-                }}
-              />
-            </>
-          )}
           {children}
         </div>
       </TooltipProvider>
@@ -253,21 +170,35 @@ const Sidebar = React.forwardRef<
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
+      <>
+        {/* Custom backdrop */}
+        {openMobile && (
+          <div 
+            className="fixed inset-0 z-50 bg-black/50 md:hidden"
+            onClick={() => setOpenMobile(false)}
+            style={{ touchAction: 'none' }}
+          />
+        )}
+        {/* Custom mobile sidebar */}
+        <div
           data-sidebar="sidebar"
           data-mobile="true"
-          className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className={cn(
+            "fixed top-0 right-0 z-[60] h-full w-[--sidebar-width] bg-sidebar text-sidebar-foreground transform transition-transform duration-300 ease-in-out md:hidden",
+            openMobile ? "translate-x-0" : "translate-x-full"
+          )}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
+          onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
+          <div className="flex h-full w-full flex-col overflow-hidden">
+            {children}
+          </div>
+        </div>
+      </>
     );
   }
 

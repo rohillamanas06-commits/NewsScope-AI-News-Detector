@@ -31,19 +31,11 @@ export const Navbar = () => {
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
       document.body.style.height = '100vh';
-      document.body.style.touchAction = 'none';
-      document.body.style.pointerEvents = 'none';
-      document.body.style.webkitUserSelect = 'none';
-      document.body.style.userSelect = 'none';
       return () => {
         document.body.style.overflow = '';
         document.body.style.position = '';
         document.body.style.width = '';
         document.body.style.height = '';
-        document.body.style.touchAction = '';
-        document.body.style.pointerEvents = '';
-        document.body.style.webkitUserSelect = '';
-        document.body.style.userSelect = '';
       };
     }
     // Always clean up if not open
@@ -51,10 +43,6 @@ export const Navbar = () => {
     document.body.style.position = '';
     document.body.style.width = '';
     document.body.style.height = '';
-    document.body.style.touchAction = '';
-    document.body.style.pointerEvents = '';
-    document.body.style.webkitUserSelect = '';
-    document.body.style.userSelect = '';
   }, [isMobile, isSheetOpen]);
 
   const handleLogout = async () => {
@@ -116,14 +104,11 @@ export const Navbar = () => {
 
       {/* Sidebar */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} modal={false}>
-        {isSheetOpen && (
-          <div 
-            className="fixed inset-0 z-50 bg-black/80 animate-in fade-in-0 duration-300" 
-            onClick={() => setIsSheetOpen(false)}
-          />
-        )}
         <SheetContent side="right" className="bg-background z-[60] w-80 shadow-2xl" style={{ padding: 0 }}>
-          <div className="flex flex-col h-full pt-12 px-4">
+          <div
+            className="flex flex-col h-full pt-12 px-4"
+            onClick={e => e.stopPropagation()}
+          >
             {/* Top Section - Auth Buttons (always visible) */}
             <div className="pb-6 border-b border-border/50">
               <div className="space-y-3">
