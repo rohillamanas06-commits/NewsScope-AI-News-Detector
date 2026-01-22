@@ -37,7 +37,7 @@ Session(app)
 
 # Enable CORS with credentials
 CORS(app, 
-     resources={r"/api/*": {"origins": os.getenv('FRONTEND_URL', 'http://localhost:8080')}},
+     resources={r"/api/*": {"origins": [os.getenv('FRONTEND_URL', 'http://localhost:8080'), 'https://newsscope-ai-news-detector.vercel.app']}},
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
