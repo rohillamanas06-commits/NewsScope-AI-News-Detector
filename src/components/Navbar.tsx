@@ -103,8 +103,8 @@ export const Navbar = () => {
       </nav>
 
       {/* Sidebar */}
-      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} modal={false}>
-        <SheetContent side="right" className="bg-background z-[60] w-80 shadow-2xl" style={{ padding: 0 }}>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen} modal={true}>
+        <SheetContent side="right" className="bg-background/95 backdrop-blur-md z-[60] w-80 shadow-2xl" style={{ padding: 0 }}>
           <div
             className="flex flex-col h-full pt-12 px-4"
             onClick={e => e.stopPropagation()}
@@ -154,6 +154,18 @@ export const Navbar = () => {
                 <Settings className="h-4 w-4 mr-3" />
                 Change Theme
               </Button>
+              {isAuthenticated && (
+                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive">
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              )}
+              {isAuthenticated && (
+                <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                  <Info className="h-4 w-4 mr-3" />
+                  About
+                </Button>
+              )}
               {!isAuthenticated && (
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
                   <Info className="h-4 w-4 mr-3" />
@@ -162,20 +174,8 @@ export const Navbar = () => {
               )}
             </div>
 
-            {/* Bottom Section - About (only for authenticated users) */}
-            <div className="pt-6 border-t border-border/50">
-              {isAuthenticated && (
-                <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                  <Info className="h-4 w-4 mr-3" />
-                  About
-                </Button>
-              )}
-              {isAuthenticated && (
-                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive mt-2">
-                  <LogOut className="h-4 w-4 mr-3" />
-                  Logout
-                </Button>
-              )}
+            {/* Bottom Section - Empty */}
+            <div className="pt-4 border-t border-border/50">
             </div>
           </div>
         </SheetContent>
