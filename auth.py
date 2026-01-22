@@ -17,6 +17,10 @@ def login_required(f):
     """Decorator to require authentication"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # Handle OPTIONS requests for CORS preflight
+        if request.method == 'OPTIONS':
+            return '', 200
+        
         if 'user_id' not in session:
             return jsonify({
                 'success': False,
