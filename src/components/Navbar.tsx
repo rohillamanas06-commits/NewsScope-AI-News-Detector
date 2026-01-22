@@ -155,12 +155,6 @@ export const Navbar = () => {
                 Change Theme
               </Button>
               {isAuthenticated && (
-                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive">
-                  <LogOut className="h-4 w-4 mr-3" />
-                  Logout
-                </Button>
-              )}
-              {isAuthenticated && (
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
                   <Info className="h-4 w-4 mr-3" />
                   About
@@ -170,6 +164,12 @@ export const Navbar = () => {
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
                   <Info className="h-4 w-4 mr-3" />
                   About
+                </Button>
+              )}
+              {isAuthenticated && (
+                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-destructive/10 text-destructive hover:text-destructive">
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
                 </Button>
               )}
             </div>
