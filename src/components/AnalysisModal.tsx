@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { 
   CheckCircle, 
@@ -83,6 +84,9 @@ export const AnalysisModal: React.FC<AnalysisModalProps> = ({
             <Shield className="w-6 h-6 text-primary" />
             Analysis Results
           </DialogTitle>
+          <DialogDescription>
+            Detailed analysis of the news content including verdict, confidence score, and supporting factors.
+          </DialogDescription>
         </DialogHeader>
 
         {isLoading ? (

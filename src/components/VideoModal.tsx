@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { X, Play } from 'lucide-react';
 
@@ -21,6 +22,9 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose }) => {
             <Play className="w-5 h-5 text-primary" />
             How NewsScope Works
           </DialogTitle>
+          <DialogDescription>
+            Watch a demonstration of how NewsScope analyzes news articles and detects misinformation.
+          </DialogDescription>
         </DialogHeader>
         
         <div className="aspect-video bg-muted relative">
