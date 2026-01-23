@@ -71,13 +71,6 @@ export const Navbar = () => {
             <span className="text-xl font-bold">NewsScope</span>
           </Link>
 
-          {/* Center - Navigation Buttons (Hidden on mobile) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center gap-2">
-            <Button variant="ghost" onClick={() => handleNavigation('/')}> 
-              Home
-            </Button>
-          </div>
-
           {/* Right Side - Auth State */}
           <div className="flex items-center gap-2">
             {/* Always show sidebar menu button */}
@@ -139,13 +132,12 @@ export const Navbar = () => {
 
             {/* Middle Section - Navigation & Theme */}
             <div className="flex-1 py-6 space-y-2">
-              {/* Home Button - Mobile only */}
-              {isMobile && (
-                <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                  <Home className="h-4 w-4 mr-3" />
-                  Home
-                </Button>
-              )}
+              {/* Home Button - Always visible at top */}
+              <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                <Home className="h-4 w-4 mr-3" />
+                Home
+              </Button>
+              
               {isAuthenticated && (
                 <>
                   <Button variant="ghost" onClick={() => handleNavigation('/dashboard')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
