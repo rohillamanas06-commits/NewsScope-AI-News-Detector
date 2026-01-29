@@ -41,6 +41,7 @@ CORS(app,
      resources={r"/api/*": {"origins": [
        'http://localhost:8080', 
        'https://newsscope-ai-news-detector.vercel.app',
+       'https://newsscope-ai-news-detector-fxh1.onrender.com',
        'http://localhost:3000'
      ]}},
      supports_credentials=True,
