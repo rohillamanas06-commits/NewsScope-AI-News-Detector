@@ -242,7 +242,7 @@ Format your response as JSON with the following structure:
             "key_claims": ai_analysis.get("key_claims", []),
             "sources_checked": sources,
             "total_sources_checked": len(sources),
-            "ai_model": "Google Gemini 2.5 Flash"
+            "ai_model": "Google gemini-3-flash-preview"
         }
         
         # Save to database if user is logged in
