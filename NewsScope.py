@@ -9,9 +9,10 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+import razorpay
 
 # Import database models and auth
-from models import db, User, AnalysisHistory
+from models import db, User, AnalysisHistory, CreditTransaction, PaymentOrder
 from auth import auth_bp, login_required
 
 # Load environment variables
@@ -64,6 +65,102 @@ model = genai.GenerativeModel('gemini-3-flash-preview')
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 SENDGRID_FROM_EMAIL = os.getenv('SENDGRID_FROM_EMAIL', 'noreply@newsscope.com')
 SENDGRID_TO_EMAIL = os.getenv('SENDGRID_TO_EMAIL', 'rohillamanas06@gmail.com')
+
+# Configure Razorpay
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
+razorpay_client = None
+if RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET:
+    razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+
+# Credit packages - Same as ResuAI
+CREDIT_PACKAGES = {
+    '20': {'credits': 20, 'price': 50, 'name': 'Starter Pack'},
+    '100': {'credits': 100, 'price': 100, 'name': 'Pro Pack'}
+}
+
+
+# Credit Management Functions
+def get_user_credits(user_id):
+    """Get user's current credit balance"""
+    try:
+        user = User.query.get(user_id)
+        return user.credits if user else None
+    except Exception as e:
+        print(f"Error getting user credits: {str(e)}")
+        return None
+
+
+def deduct_credits(user_id, amount, description):
+    """Deduct credits from user account and log transaction"""
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return False
+        
+        # Check if user has enough credits
+        if user.credits < amount:
+            return False
+        
+        current_credits = user.credits
+        credits_used = user.credits_used or 0
+        
+        user.credits = current_credits - amount
+        user.credits_used = credits_used + amount
+        
+        # Log transaction
+        transaction = CreditTransaction(
+            user_id=user_id,
+            transaction_type='deduct',
+            credits_amount=amount,
+            credits_before=current_credits,
+            credits_after=user.credits,
+            description=description,
+            created_at=datetime.utcnow()
+        )
+        
+        db.session.add(transaction)
+        db.session.commit()
+        
+        return True
+    except Exception as e:
+        print(f"Error deducting credits: {str(e)}")
+        db.session.rollback()
+        return False
+
+
+def add_credits(user_id, amount, description, payment_id=None, order_id=None, amount_paid=None):
+    """Add credits to user account and log transaction"""
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return False
+        
+        current_credits = user.credits
+        user.credits = current_credits + amount
+        
+        # Log transaction
+        transaction = CreditTransaction(
+            user_id=user_id,
+            transaction_type='purchase',
+            credits_amount=amount,
+            credits_before=current_credits,
+            credits_after=user.credits,
+            description=description,
+            payment_id=payment_id,
+            order_id=order_id,
+            amount_paid=amount_paid,
+            created_at=datetime.utcnow()
+        )
+        
+        db.session.add(transaction)
+        db.session.commit()
+        
+        return True
+    except Exception as e:
+        print(f"Error adding credits: {str(e)}")
+        db.session.rollback()
+        return False
 
 
 class NewsAnalyzer:
@@ -334,12 +431,38 @@ def analyze_news():
         # Get user_id from session
         user_id = session.get('user_id')
         
+        # Check if user has enough credits (1 credit per analysis)
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({
+                "error": "User not found",
+                "message": "Please login again"
+            }), 404
+        
+        if user.credits < 1:
+            return jsonify({
+                "error": "Insufficient credits",
+                "message": "You need 1 credit to analyze news. Please purchase more credits.",
+                "credits": user.credits
+            }), 402  # Payment Required
+        
+        # Deduct 1 credit
+        if not deduct_credits(user_id, 1, "News analysis"):
+            return jsonify({
+                "error": "Credit deduction failed",
+                "message": "Unable to deduct credits. Please try again."
+            }), 500
+        
         # Generate analysis report
         report = analyzer.generate_report(news_text, headline, user_id)
         
+        # Get updated credit balance
+        user = User.query.get(user_id)
+        
         return jsonify({
             "success": True,
-            "data": report
+            "data": report,
+            "credits_remaining": user.credits
         }), 200
         
     except Exception as e:
@@ -574,6 +697,230 @@ def send_feedback():
             "error": "Failed to send feedback",
             "message": str(e)
         }), 500
+
+
+# ===== CREDITS AND PAYMENT ENDPOINTS =====
+
+@app.route('/api/credits/packages', methods=['GET'])
+def get_credit_packages():
+    """Get available credit packages"""
+    return jsonify({
+        'packages': [
+            {
+                'id': '20',
+                'name': 'Starter Pack',
+                'credits': 20,
+                'price': 50,
+                'currency': 'INR',
+                'description': '20 credits for ₹50'
+            },
+            {
+                'id': '100',
+                'name': 'Pro Pack',
+                'credits': 100,
+                'price': 100,
+                'currency': 'INR',
+                'description': '100 credits for ₹100',
+                'popular': True
+            }
+        ]
+    }), 200
+
+
+@app.route('/api/credits/balance', methods=['GET'])
+@login_required
+def get_credit_balance():
+    """Get user's credit balance"""
+    try:
+        user_id = session.get('user_id')
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({'error': 'User not found.'}), 404
+        
+        return jsonify({
+            'credits': user.credits,
+            'credits_used': user.credits_used or 0
+        }), 200
+    except Exception as e:
+        print(f'Get credits error: {e}')
+        return jsonify({'error': 'Internal server error.'}), 500
+
+
+@app.route('/api/credits/transactions', methods=['GET'])
+@login_required
+def get_credit_transactions():
+    """Get user's credit transaction history"""
+    try:
+        user_id = session.get('user_id')
+        limit = request.args.get('limit', 50, type=int)
+        
+        transactions = CreditTransaction.query.filter_by(user_id=user_id)\
+            .order_by(CreditTransaction.created_at.desc())\
+            .limit(limit)\
+            .all()
+        
+        return jsonify({
+            'transactions': [trans.to_dict() for trans in transactions]
+        }), 200
+    except Exception as e:
+        print(f'Get transactions error: {e}')
+        return jsonify({'error': 'Internal server error.'}), 500
+
+
+@app.route('/api/payment/create-order', methods=['POST'])
+@login_required
+def create_payment_order():
+    """Create Razorpay order for credit purchase"""
+    try:
+        if not razorpay_client:
+            return jsonify({'error': 'Payment service not configured.'}), 503
+
+        user_id = session.get('user_id')
+        data = request.get_json()
+        package_id = data.get('package_id')
+
+        if package_id not in CREDIT_PACKAGES:
+            return jsonify({'error': 'Invalid package selected.'}), 400
+
+        package = CREDIT_PACKAGES[package_id]
+        amount = package['price'] * 100  # Razorpay expects amount in paise
+        
+        # Get user details
+        user = User.query.get(user_id)
+        
+        if not user:
+            return jsonify({'error': 'User not found.'}), 404
+
+        # Create Razorpay order
+        order_data = {
+            'amount': amount,
+            'currency': 'INR',
+            'payment_capture': 1,
+            'notes': {
+                'user_id': user_id,
+                'credits': package['credits'],
+                'package_id': package_id,
+                'customer_name': user.name,
+                'customer_email': user.email
+            }
+        }
+
+        razorpay_order = razorpay_client.order.create(data=order_data)
+        
+        # Save order to database
+        payment_order = PaymentOrder(
+            user_id=user_id,
+            order_id=razorpay_order['id'],
+            amount=package['price'],
+            currency='INR',
+            credits_amount=package['credits'],
+            status='created',
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        db.session.add(payment_order)
+        db.session.commit()
+
+        return jsonify({
+            'order_id': razorpay_order['id'],
+            'amount': amount,
+            'currency': 'INR',
+            'key_id': RAZORPAY_KEY_ID,
+            'credits': package['credits'],
+            'package_name': package['name'],
+            'customer_email': user.email,
+            'customer_name': user.name
+        }), 201
+
+    except Exception as e:
+        print(f'Create order error: {e}')
+        import traceback
+        traceback.print_exc()
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create payment order.'}), 500
+
+
+@app.route('/api/payment/verify', methods=['POST'])
+@login_required
+def verify_payment():
+    """Verify Razorpay payment and add credits"""
+    try:
+        if not razorpay_client:
+            return jsonify({'error': 'Payment service not configured.'}), 503
+
+        user_id = session.get('user_id')
+        data = request.get_json()
+        
+        razorpay_order_id = data.get('razorpay_order_id')
+        razorpay_payment_id = data.get('razorpay_payment_id')
+        razorpay_signature = data.get('razorpay_signature')
+
+        if not all([razorpay_order_id, razorpay_payment_id, razorpay_signature]):
+            return jsonify({'error': 'Missing payment details.'}), 400
+
+        # Verify signature
+        try:
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            razorpay_client.utility.verify_payment_signature(params_dict)
+        except Exception as e:
+            print(f'Payment verification failed: {e}')
+            return jsonify({'error': 'Payment verification failed.'}), 400
+
+        # Get order details from database
+        order = PaymentOrder.query.filter_by(order_id=razorpay_order_id, user_id=user_id).first()
+
+        if not order:
+            return jsonify({'error': 'Order not found.'}), 404
+
+        if order.status == 'paid':
+            return jsonify({'error': 'Order already processed.'}), 400
+
+        # Update order status
+        order.status = 'paid'
+        order.payment_id = razorpay_payment_id
+        order.payment_signature = razorpay_signature
+        order.updated_at = datetime.utcnow()
+        
+        db.session.commit()
+
+        # Add credits to user account
+        credits_amount = order.credits_amount
+        amount_paid = float(order.amount)
+        
+        success = add_credits(
+            user_id,
+            credits_amount,
+            f"Purchased {credits_amount} credits",
+            payment_id=razorpay_payment_id,
+            order_id=razorpay_order_id,
+            amount_paid=amount_paid
+        )
+
+        if not success:
+            return jsonify({'error': 'Failed to add credits.'}), 500
+
+        # Get updated credits
+        user = User.query.get(user_id)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Payment successful! Credits added to your account.',
+            'credits_added': credits_amount,
+            'total_credits': user.credits
+        }), 200
+
+    except Exception as e:
+        print(f'Payment verification error: {e}')
+        import traceback
+        traceback.print_exc()
+        db.session.rollback()
+        return jsonify({'error': 'Payment verification failed.'}), 500
 
 
 # Error handlers

@@ -18,8 +18,15 @@ class User(db.Model):
     reset_token = db.Column(db.String(100), unique=True)
     reset_token_expiry = db.Column(db.DateTime)
     
+    # Credit system fields
+    credits = db.Column(db.Integer, default=5, nullable=False)  # Default 5 free credits
+    credits_used = db.Column(db.Integer, default=0, nullable=False)
+    
     # Relationship with analysis history
     analyses = db.relationship('AnalysisHistory', backref='user', lazy='dynamic', cascade='all, delete-orphan')
+    
+    # Relationship with credit transactions
+    credit_transactions = db.relationship('CreditTransaction', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     
     def set_password(self, password):
         """Hash and set the user's password"""
@@ -55,7 +62,70 @@ class User(db.Model):
             'email': self.email,
             'name': self.name,
             'created_at': self.created_at.isoformat() if self.created_at else None,
-            'last_login': self.last_login.isoformat() if self.last_login else None
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+            'credits': self.credits,
+            'credits_used': self.credits_used
+        }
+
+
+class CreditTransaction(db.Model):
+    __tablename__ = 'credit_transactions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    transaction_type = db.Column(db.String(20), nullable=False)  # 'purchase', 'deduct', 'refund'
+    credits_amount = db.Column(db.Integer, nullable=False)
+    credits_before = db.Column(db.Integer, nullable=False)
+    credits_after = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.Text)
+    payment_id = db.Column(db.String(100))
+    order_id = db.Column(db.String(100))
+    amount_paid = db.Column(db.Float)  # Amount in rupees
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    
+    def to_dict(self):
+        """Convert transaction to dictionary"""
+        return {
+            'id': self.id,
+            'transaction_type': self.transaction_type,
+            'credits_amount': self.credits_amount,
+            'credits_before': self.credits_before,
+            'credits_after': self.credits_after,
+            'description': self.description,
+            'payment_id': self.payment_id,
+            'order_id': self.order_id,
+            'amount_paid': self.amount_paid,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
+class PaymentOrder(db.Model):
+    __tablename__ = 'payment_orders'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    order_id = db.Column(db.String(100), unique=True, nullable=False)
+    amount = db.Column(db.Float, nullable=False)  # Amount in rupees
+    currency = db.Column(db.String(10), default='INR')
+    credits_amount = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(20), default='created')  # created, paid, failed
+    payment_id = db.Column(db.String(100))
+    payment_signature = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def to_dict(self):
+        """Convert order to dictionary"""
+        return {
+            'id': self.id,
+            'order_id': self.order_id,
+            'amount': self.amount,
+            'currency': self.currency,
+            'credits_amount': self.credits_amount,
+            'status': self.status,
+            'payment_id': self.payment_id,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
 
 

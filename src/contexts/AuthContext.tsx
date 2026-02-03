@@ -7,6 +7,8 @@ interface User {
   name: string;
   created_at?: string;
   last_login?: string;
+  credits?: number;
+  credits_used?: number;
 }
 
 interface AuthContextType {
@@ -16,6 +18,8 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isLoading: boolean;
   isAuthenticated: boolean;
+  credits: number;
+  refreshCredits: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +39,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [credits, setCredits] = useState<number>(0);
 
   useEffect(() => {
     // Check if user is logged in on mount
@@ -46,12 +51,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await authApi.getCurrentUser();
       if (response.success && response.user) {
         setUser(response.user);
+        setCredits(response.user.credits || 0);
       }
     } catch (error) {
       // User not logged in
       setUser(null);
+      setCredits(0);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const refreshCredits = async () => {
+    try {
+      const response = await authApi.getCurrentUser();
+      if (response.success && response.user) {
+        setUser(response.user);
+        setCredits(response.user.credits || 0);
+      }
+    } catch (error) {
+      console.error('Failed to refresh credits:', error);
     }
   };
 
@@ -59,6 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const response = await authApi.signup(name, email, password);
     if (response.success && response.user) {
       setUser(response.user);
+      setCredits(response.user.credits || 5);
     } else {
       throw new Error(response.message || 'Signup failed');
     }
@@ -68,6 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const response = await authApi.login(email, password);
     if (response.success && response.user) {
       setUser(response.user);
+      setCredits(response.user.credits || 0);
     } else {
       throw new Error(response.message || 'Login failed');
     }
@@ -76,6 +97,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     await authApi.logout();
     setUser(null);
+    setCredits(0);
   };
 
   const value = {
@@ -84,7 +106,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signup,
     logout,
     isLoading,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    credits,
+    refreshCredits
   };
 
   return (

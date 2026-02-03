@@ -13,14 +13,19 @@ import {
   Trash2,
   CheckSquare,
   Square,
-  AlertCircle
+  AlertCircle,
+  Coins,
+  Plus,
+  Sparkles
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { dashboardApi } from '@/services/api';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { BuyCreditsModal } from '@/components/BuyCreditsModal';
 
 interface DashboardStats {
   total_analyses: number;
@@ -50,7 +55,9 @@ const Dashboard: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false);
+  const [showBuyCredits, setShowBuyCredits] = useState(false);
   const { toast } = useToast();
+  const { credits, refreshCredits } = useAuth();
 
   useEffect(() => {
     fetchDashboardData();
@@ -203,6 +210,46 @@ const Dashboard: React.FC = () => {
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">Dashboard</h1>
             <p className="text-muted-foreground">Your news analysis overview</p>
           </div>
+
+          {/* Credit Balance Card */}
+          <Card className="mb-8 border-gold/20 bg-gradient-to-br from-gold/5 to-transparent">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-gold">
+                <Coins className="h-5 w-5" />
+                Credit Balance
+              </CardTitle>
+              <CardDescription>
+                Your available credits for news analysis
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <p className="text-5xl font-bold text-gold">{credits}</p>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-muted-foreground">credits</span>
+                      <span className="text-xs text-muted-foreground">1 credit per analysis</span>
+                    </div>
+                  </div>
+                  {credits <= 2 && (
+                    <div className="mt-3 flex items-center gap-2 text-sm text-orange-500">
+                      <AlertCircle className="h-4 w-4" />
+                      <span>Low balance! Buy more credits to continue analyzing.</span>
+                    </div>
+                  )}
+                </div>
+                <Button
+                  onClick={() => setShowBuyCredits(true)}
+                  className="bg-gradient-to-r from-gold to-gold-light hover:from-gold/90 hover:to-gold-light/90 text-background font-semibold"
+                  size="lg"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Buy Credits
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -464,6 +511,14 @@ const Dashboard: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Buy Credits Modal */}
+      <BuyCreditsModal
+        isOpen={showBuyCredits}
+        onClose={() => setShowBuyCredits(false)}
+        onSuccess={refreshCredits}
+        currentCredits={credits}
+      />
     </div>
   );
 };
