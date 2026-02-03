@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Coins, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Coins, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Declare Razorpay for TypeScript
@@ -214,67 +214,47 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] bg-gradient-to-br from-background to-background/95 border-gold/20">
+      <DialogContent className="sm:max-w-[420px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl font-display text-gold">
-            <Coins className="h-6 w-6" />
+          <DialogTitle className="flex items-center gap-2">
+            <Coins className="h-5 w-5" />
             Buy Credits
           </DialogTitle>
-          <DialogDescription className="text-base">
-            Current Balance: <span className="font-semibold text-gold">{currentCredits} Credits</span>
+          <DialogDescription>
+            Current Balance: {currentCredits} Credits
           </DialogDescription>
         </DialogHeader>
         
         {error && (
-          <div className="p-3 bg-destructive/10 border border-destructive rounded-lg text-sm text-destructive">
+          <div className="p-3 bg-destructive/10 border border-destructive rounded text-sm text-destructive">
             {error}
           </div>
         )}
         
-        <div className="space-y-4 py-4">
+        <div className="space-y-3 py-4">
           {packages.map((pkg) => (
             <div
               key={pkg.id}
-              className={`relative p-5 rounded-xl border-2 transition-all duration-300 hover:shadow-xl ${
-                pkg.popular 
-                  ? 'border-gold bg-gold/5 hover:border-gold/80' 
-                  : 'border-border/50 hover:border-gold/50'
-              }`}
+              className="p-4 rounded-lg border hover:border-primary/50 transition-colors"
             >
-              {pkg.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-gold to-gold-light rounded-full">
-                  <span className="text-xs font-semibold text-background flex items-center gap-1">
-                    <Sparkles className="h-3 w-3" />
-                    Most Popular
-                  </span>
-                </div>
-              )}
-              
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="font-display font-semibold text-lg text-foreground">{pkg.name}</h3>
-                  <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                    <Coins className="h-4 w-4 text-gold" />
-                    {pkg.credits} credits
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-gold">₹{pkg.price}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ₹{(pkg.price / pkg.credits).toFixed(2)}/credit
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">{pkg.credits} Credits</span>
+                    {pkg.popular && <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded">Popular</span>}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    ₹{(pkg.price / pkg.credits).toFixed(2)} per credit
                   </div>
                 </div>
+                <div className="text-2xl font-bold">₹{pkg.price}</div>
               </div>
               
               <Button 
                 onClick={() => handlePurchase(pkg.id)}
                 disabled={loading && selectedPackage === pkg.id}
-                className={`w-full font-semibold ${
-                  pkg.popular 
-                    ? 'bg-gradient-to-r from-gold to-gold-light hover:from-gold/90 hover:to-gold-light/90 text-background' 
-                    : 'bg-primary hover:bg-primary/90'
-                }`}
-                size="lg"
+                className="w-full"
+                variant={pkg.popular ? "default" : "outline"}
               >
                 {loading && selectedPackage === pkg.id ? (
                   <>
@@ -282,24 +262,15 @@ export const BuyCreditsModal: React.FC<BuyCreditsModalProps> = ({
                     Processing...
                   </>
                 ) : (
-                  <>
-                    <CheckCircle2 className="h-4 w-4 mr-2" />
-                    Buy {pkg.credits} Credits
-                  </>
+                  `Buy Now`
                 )}
               </Button>
             </div>
           ))}
         </div>
         
-        <div className="flex items-center justify-center gap-2 pt-2 border-t border-border/50">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
-              <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span>Secure payment powered by Razorpay</span>
-          </div>
+        <div className="text-center text-xs text-muted-foreground pt-2 border-t">
+          Secure payment via Razorpay
         </div>
       </DialogContent>
     </Dialog>

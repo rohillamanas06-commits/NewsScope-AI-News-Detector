@@ -9,7 +9,10 @@ import {
   Sidebar,
   LayoutDashboard,
   LogIn,
-  Home
+  Home,
+  Palette,
+  Leaf,
+  Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -151,8 +154,10 @@ export const Navbar = () => {
                 </>
               )}
               <Button variant="ghost" onClick={toggleTheme} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                <Settings className="h-4 w-4 mr-3" />
-                Change Theme
+                {theme === 'brown' && <Palette className="h-4 w-4 mr-3 text-amber-700" />}
+                {theme === 'green' && <Leaf className="h-4 w-4 mr-3 text-emerald-600" />}
+                {theme === 'purple' && <Zap className="h-4 w-4 mr-3 text-purple-600" />}
+                <span>{theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</span>
               </Button>
               {isAuthenticated && (
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
