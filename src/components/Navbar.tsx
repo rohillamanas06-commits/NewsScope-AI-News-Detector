@@ -12,7 +12,8 @@ import {
   Home,
   Palette,
   Leaf,
-  Zap
+  Zap,
+  Coins
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,12 +21,14 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { BuyCreditsModal } from '@/components/BuyCreditsModal';
 
 export const Navbar = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, credits, refreshCredits } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [showBuyCredits, setShowBuyCredits] = useState(false);
   const isMobile = useIsMobile();
 
   // Lock body scroll on mobile when sidebar is open
@@ -76,6 +79,18 @@ export const Navbar = () => {
 
           {/* Right Side - Auth State */}
           <div className="flex items-center gap-2">
+            {/* Credit Display - Small Icon with Number */}
+            {isAuthenticated && (
+              <button
+                onClick={() => setShowBuyCredits(true)}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gold/10 border border-gold/20 hover:bg-gold/15 transition-colors cursor-pointer"
+                title="Click to buy credits"
+              >
+                <Coins className="h-4 w-4 text-gold" />
+                <span className="text-sm font-semibold text-gold">{credits}</span>
+              </button>
+            )}
+            
             {/* Always show sidebar menu button */}
             <div className="hidden md:flex items-center gap-3">
               <Button 
@@ -185,6 +200,14 @@ export const Navbar = () => {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Buy Credits Modal */}
+      <BuyCreditsModal
+        isOpen={showBuyCredits}
+        onClose={() => setShowBuyCredits(false)}
+        onSuccess={refreshCredits}
+        currentCredits={credits}
+      />
     </>
   );
 };

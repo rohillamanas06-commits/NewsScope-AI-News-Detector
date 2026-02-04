@@ -211,46 +211,6 @@ const Dashboard: React.FC = () => {
             <p className="text-muted-foreground">Your news analysis overview</p>
           </div>
 
-          {/* Credit Balance Card */}
-          <Card className="mb-8 border-gold/20 bg-gradient-to-br from-gold/5 to-transparent">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-gold">
-                <Coins className="h-5 w-5" />
-                Credit Balance
-              </CardTitle>
-              <CardDescription>
-                Your available credits for news analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-2 sm:gap-3">
-                    <p className="text-4xl sm:text-5xl font-bold text-gold">{credits}</p>
-                    <div className="flex flex-col">
-                      <span className="text-xs sm:text-sm text-muted-foreground">credits</span>
-                      <span className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">1 credit per analysis</span>
-                    </div>
-                  </div>
-                  {credits <= 2 && (
-                    <div className="mt-3 flex items-start gap-2 text-xs sm:text-sm text-orange-500">
-                      <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                      <span className="leading-tight">Low balance! Buy more credits to continue analyzing.</span>
-                    </div>
-                  )}
-                </div>
-                <Button
-                  onClick={() => setShowBuyCredits(true)}
-                  className="bg-gradient-to-r from-gold to-gold-light hover:from-gold/90 hover:to-gold-light/90 text-background font-semibold w-full sm:w-auto"
-                  size="default"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Buy Credits
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
