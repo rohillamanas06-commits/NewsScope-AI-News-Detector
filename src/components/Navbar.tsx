@@ -79,6 +79,19 @@ export const Navbar = () => {
 
           {/* Right Side - Auth State */}
           <div className="flex items-center gap-2">
+            {/* Login Button - Show when not authenticated */}
+            {!isAuthenticated && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate('/login')}
+                className="hidden md:flex items-center gap-2"
+              >
+                <LogIn className="h-4 w-4" />
+                Login
+              </Button>
+            )}
+            
             {/* Credit Display - Small Icon with Number */}
             {isAuthenticated && (
               <button
