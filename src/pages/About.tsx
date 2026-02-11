@@ -249,15 +249,6 @@ const About: React.FC = () => {
                         </a>
                       </div>
                     </div>
-                    
-                    <div className="flex justify-center md:justify-start">
-                      <Button variant="outline" size="lg" asChild className="border-gold text-gold hover:bg-gold hover:text-background shadow-lg font-semibold">
-                        <a href="https://manas-rohilla.vercel.app" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                          <ExternalLink className="w-4 h-4" />
-                          <span>View Portfolio</span>
-                        </a>
-                      </Button>
-                    </div>
                   </div>
                 </div>
               </div>
