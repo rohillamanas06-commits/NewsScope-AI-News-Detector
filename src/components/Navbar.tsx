@@ -182,10 +182,14 @@ export const Navbar = () => {
                 </>
               )}
               <Button variant="ghost" onClick={toggleTheme} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                {theme === 'brown' && <Palette className="h-4 w-4 mr-3 text-amber-700" />}
-                {theme === 'green' && <Leaf className="h-4 w-4 mr-3 text-emerald-600" />}
-                {theme === 'purple' && <Zap className="h-4 w-4 mr-3 text-purple-600" />}
-                <span>{theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</span>
+                {theme === 'brown' && <Leaf className="h-4 w-4 mr-3 text-emerald-600" />}
+                {theme === 'green' && <Zap className="h-4 w-4 mr-3 text-purple-600" />}
+                {theme === 'purple' && <Palette className="h-4 w-4 mr-3 text-amber-700" />}
+                <span>
+                  {theme === 'brown' && 'Green Theme'}
+                  {theme === 'green' && 'Purple Theme'}
+                  {theme === 'purple' && 'Brown Theme'}
+                </span>
               </Button>
               {isAuthenticated && (
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">

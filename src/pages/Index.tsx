@@ -97,10 +97,11 @@ const Index: React.FC = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-                <Button variant="default" size="lg" asChild className="bg-gold text-background hover:bg-gold-light shadow-lg font-semibold w-full sm:w-auto px-8 py-3">
+                <Button variant="default" size="lg" asChild className="relative group bg-gold text-background hover:bg-gold-light shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.35)] font-bold w-full sm:w-auto px-10 py-6 text-base rounded-xl transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] overflow-hidden border border-white/10">
                   <Link to="/dashboard" className="flex items-center justify-center gap-2">
-                    <span>Get Started</span>
-                    <ArrowRight className="w-4 h-4 flex-shrink-0" />
+                    <span className="relative z-10 tracking-wide">Get Started</span>
+                    <ArrowRight className="relative z-10 w-5 h-5 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+                    <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
                   </Link>
                 </Button>
               </div>
