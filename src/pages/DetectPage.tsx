@@ -79,11 +79,6 @@ const DetectPage: React.FC = () => {
         };
 
         setResult(analysisResult);
-        
-        toast({
-          title: "Analysis Complete",
-          description: `Checked ${data.total_sources_checked} sources using ${data.ai_model}`,
-        });
       } else {
         throw new Error(response.message || 'Analysis failed');
       }
