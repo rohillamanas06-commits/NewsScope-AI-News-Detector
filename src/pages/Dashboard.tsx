@@ -216,7 +216,6 @@ const Dashboard: React.FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Total Analyses</CardTitle>
-                <FileText className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats?.total_analyses || 0}</div>
@@ -229,7 +228,6 @@ const Dashboard: React.FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Authentic News</CardTitle>
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-emerald-500">
@@ -244,7 +242,6 @@ const Dashboard: React.FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">False News</CardTitle>
-                <XCircle className="w-4 h-4 text-red-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-red-500">
@@ -259,7 +256,6 @@ const Dashboard: React.FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Last Analysis</CardTitle>
-                <Clock className="w-4 h-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-sm font-medium">
@@ -278,7 +274,6 @@ const Dashboard: React.FC = () => {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5" />
                 Verdict Distribution
               </CardTitle>
             </CardHeader>
@@ -292,7 +287,6 @@ const Dashboard: React.FC = () => {
                     <div key={verdict}>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          {getVerdictIcon(verdict)}
                           <span className="font-medium">{verdict}</span>
                         </div>
                         <span className="text-sm text-muted-foreground">
@@ -322,7 +316,6 @@ const Dashboard: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5" />
                   Recent Analyses
                 </CardTitle>
                 {recentAnalyses.length > 0 && (

@@ -46,3 +46,7 @@ pids
 # OS
 .DS_Store
 Thumbs.db
+
+
+# Flask session data
+flask_session/

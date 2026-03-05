@@ -28,9 +28,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
-app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'  # HTTPS only in production
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Required for cross-origin cookies
+
+# Session cookie settings based on environment
+is_production = os.getenv('FLASK_ENV') == 'production'
+if is_production:
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Cross-origin in production
+else:
+    app.config['SESSION_COOKIE_SECURE'] = False
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Same-site for local development
+
 app.config['SESSION_COOKIE_DOMAIN'] = None  # Allow cross-domain cookies
 
 # Initialize extensions
@@ -44,7 +52,8 @@ CORS(app,
        'https://newsscope-ai-news-detector.vercel.app',
        'https://newsscope-ai-news-detector-fxh1.onrender.com',
        'https://newsscope-ai-news-detector-ixbd.onrender.com',
-       'http://localhost:3000'
+       'http://localhost:3000',
+       'http://localhost:5000'
      ]}},
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"],
