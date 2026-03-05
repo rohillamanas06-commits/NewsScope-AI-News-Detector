@@ -149,7 +149,7 @@ class AnalysisHistory(db.Model):
         """Convert analysis to dictionary"""
         return {
             'id': self.id,
-            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'timestamp': self.timestamp.isoformat() + 'Z' if self.timestamp else None,
             'headline': self.headline,
             'news_text': self.news_text[:200] + '...' if len(self.news_text) > 200 else self.news_text,
             'verdict': self.verdict,

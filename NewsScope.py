@@ -552,7 +552,7 @@ def get_dashboard():
             "statistics": {
                 "total_analyses": total_analyses,
                 "verdict_distribution": verdict_counts,
-                "last_analysis": last_analysis.timestamp.isoformat() if last_analysis else None
+                "last_analysis": last_analysis.timestamp.isoformat() + 'Z' if last_analysis else None
             },
             "recent_analyses": [item.to_dict() for item in recent_analyses]
         }), 200
