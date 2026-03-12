@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { 
   BarChart3, 
   Clock, 
@@ -194,7 +193,6 @@ const Dashboard: React.FC = () => {
             <div className="animate-pulse text-muted-foreground">Loading dashboard...</div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -412,8 +410,6 @@ const Dashboard: React.FC = () => {
           </Card>
         </div>
       </main>
-
-      <Footer />
 
       {/* Delete Selected Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

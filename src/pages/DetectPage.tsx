@@ -13,7 +13,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { AnalysisModal } from '@/components/AnalysisModal';
 import { useToast } from '@/hooks/use-toast';
 import { newsApi } from '@/services/api';
@@ -249,8 +248,6 @@ const DetectPage: React.FC = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
 
       <AnalysisModal
         isOpen={isModalOpen}
