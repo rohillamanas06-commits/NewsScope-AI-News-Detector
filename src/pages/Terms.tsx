@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { FileText, Scale } from 'lucide-react';
+import { Scale } from 'lucide-react';
+
 
 const Terms: React.FC = () => {
   return (
@@ -131,7 +132,6 @@ const Terms: React.FC = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };

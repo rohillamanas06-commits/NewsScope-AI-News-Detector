@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 
+
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -103,7 +104,6 @@ const FAQ: React.FC = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };

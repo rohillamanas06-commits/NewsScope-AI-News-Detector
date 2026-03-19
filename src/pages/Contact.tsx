@@ -7,6 +7,7 @@ import { Mail, Github, Linkedin, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/contexts/ThemeContext';
 
+
 const Contact: React.FC = () => {
   const { toast } = useToast();
   const { theme } = useTheme();
@@ -35,7 +36,6 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
     setTimeout(() => {
       toast({
         title: "Message Sent!",
@@ -109,8 +109,7 @@ const Contact: React.FC = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       required
-                      className="bg-transparent border-border/50 focus:border-[var(--theme-color)]"
-                      style={{ '--theme-color': getThemeColor() } as React.CSSProperties}
+                      className="bg-transparent border-border/50"
                     />
                   </div>
                   <div className="space-y-2">
@@ -123,8 +122,7 @@ const Contact: React.FC = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
-                      className="bg-transparent border-border/50 focus:border-[var(--theme-color)]"
-                      style={{ '--theme-color': getThemeColor() } as React.CSSProperties}
+                      className="bg-transparent border-border/50"
                     />
                   </div>
                 </div>
@@ -135,8 +133,7 @@ const Contact: React.FC = () => {
                     placeholder="What's this about?"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="bg-transparent border-border/50 focus:border-[var(--theme-color)]"
-                    style={{ '--theme-color': getThemeColor() } as React.CSSProperties}
+                    className="bg-transparent border-border/50"
                   />
                 </div>
                 
@@ -150,8 +147,7 @@ const Contact: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     required
                     rows={6}
-                    className="bg-transparent border-border/50 focus:border-[var(--theme-color)] resize-none"
-                    style={{ '--theme-color': getThemeColor() } as React.CSSProperties}
+                    className="bg-transparent border-border/50 resize-none"
                   />
                 </div>
                 
@@ -175,7 +171,6 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };

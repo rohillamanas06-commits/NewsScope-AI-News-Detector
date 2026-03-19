@@ -7,7 +7,6 @@ export const Footer: React.FC = () => {
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    window.scrollTo(0, 0);
   };
 
   const scrollToTop = () => {

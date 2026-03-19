@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Brain, Shield, Zap, Globe } from 'lucide-react';
 
+
 const About: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -60,7 +61,6 @@ const About: React.FC = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Brain, Shield, Search, FileText, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
 
+
 const Learn: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">

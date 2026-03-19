@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Shield, Lock } from 'lucide-react';
+import { Shield } from 'lucide-react';
+
 
 const Privacy: React.FC = () => {
   return (
@@ -168,7 +169,6 @@ const Privacy: React.FC = () => {
           </div>
         </div>
       </main>
-
     </div>
   );
 };
