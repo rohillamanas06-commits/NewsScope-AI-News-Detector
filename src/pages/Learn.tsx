@@ -7,7 +7,7 @@ const Learn: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
@@ -22,12 +22,12 @@ const Learn: React.FC = () => {
           <div className="bg-muted/30 rounded-2xl p-8 mb-12">
             <h2 className="text-2xl font-semibold mb-4">Understanding Fake News</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Fake news is intentionally misleading information presented as legitimate news. 
-              It can spread rapidly through social media and messaging platforms, influencing 
+              Fake news is intentionally misleading information presented as legitimate news.
+              It can spread rapidly through social media and messaging platforms, influencing
               public opinion and causing real-world harm.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              NewsScope helps you identify fake news by analyzing multiple factors using 
+              NewsScope helps you identify fake news by analyzing multiple factors using
               advanced artificial intelligence and machine learning algorithms.
             </p>
           </div>
@@ -35,7 +35,7 @@ const Learn: React.FC = () => {
           {/* How It Works Steps */}
           <div className="space-y-8 mb-12">
             <h2 className="text-2xl font-semibold text-center">Our Detection Process</h2>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -44,12 +44,12 @@ const Learn: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-2">1. Content Analysis</h3>
                   <p className="text-sm text-muted-foreground">
-                    Our AI examines the text structure, writing style, and linguistic patterns 
+                    Our AI examines the text structure, writing style, and linguistic patterns
                     to identify characteristics commonly found in fake news.
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Brain className="h-6 w-6 text-primary" />
@@ -57,12 +57,12 @@ const Learn: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-2">2. Source Verification</h3>
                   <p className="text-sm text-muted-foreground">
-                    We cross-reference the information with trusted news sources and fact-checking 
+                    We cross-reference the information with trusted news sources and fact-checking
                     organizations to verify claims and statements.
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Shield className="h-6 w-6 text-primary" />
@@ -70,12 +70,12 @@ const Learn: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-2">3. Credibility Scoring</h3>
                   <p className="text-sm text-muted-foreground">
-                    Based on our analysis, we assign a credibility score indicating the likelihood 
+                    Based on our analysis, we assign a credibility score indicating the likelihood
                     that the content is authentic or fake.
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <FileText className="h-6 w-6 text-primary" />
@@ -83,7 +83,7 @@ const Learn: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-2">4. Detailed Report</h3>
                   <p className="text-sm text-muted-foreground">
-                    You receive a comprehensive report with the credibility score, key findings, 
+                    You receive a comprehensive report with the credibility score, key findings,
                     and red flags detected in the content.
                   </p>
                 </div>

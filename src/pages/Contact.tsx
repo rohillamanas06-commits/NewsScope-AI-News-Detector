@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Github, Linkedin, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useTheme } from '@/contexts/ThemeContext';
+
 
 
 const Contact: React.FC = () => {
   const { toast } = useToast();
-  const { theme } = useTheme();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,23 +19,12 @@ const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const getThemeColor = () => {
-    switch (theme) {
-      case 'brown':
-        return '#c78f52';
-      case 'green':
-        return '#10b981';
-      case 'purple':
-        return '#8b5cf6';
-      default:
-        return '#c78f52';
-    }
-  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     setTimeout(() => {
       toast({
         title: "Message Sent!",
@@ -49,12 +38,12 @@ const Contact: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ color: getThemeColor() }}>Contact Us</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ color: '#ffffff' }}>Contact Us</h1>
             <p className="text-muted-foreground text-lg">
               Have a question, found a bug, or want to give feedback? We'd love to hear from you.
             </p>
@@ -64,29 +53,29 @@ const Contact: React.FC = () => {
             {/* Contact Info - Left Side */}
             <div className="space-y-6">
               <h2 className="text-xl font-semibold mb-6">Get in touch</h2>
-              
+
               <div className="space-y-4">
-                <a 
-                  href="mailto:rohillamanas06@gmail.com" 
+                <a
+                  href="mailto:rohillamanas06@gmail.com"
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Mail className="h-5 w-5 text-[#c78f52]" />
                   <span>rohillamanas06@gmail.com</span>
                 </a>
-                
-                <a 
-                  href="https://github.com/rohillamanas06-commits" 
-                  target="_blank" 
+
+                <a
+                  href="https://github.com/rohillamanas06-commits"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Github className="h-5 w-5 text-[#c78f52]" />
                   <span>github.com/rohillamanas06-commits</span>
                 </a>
-                
-                <a 
-                  href="https://www.linkedin.com/in/manas-rohilla-b73415338/" 
-                  target="_blank" 
+
+                <a
+                  href="https://www.linkedin.com/in/manas-rohilla-b73415338/"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
                 >
@@ -126,7 +115,7 @@ const Contact: React.FC = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Subject</label>
                   <Input
@@ -136,7 +125,7 @@ const Contact: React.FC = () => {
                     className="bg-transparent border-border/50"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">
                     Message <span className="text-red-500">*</span>
@@ -150,11 +139,11 @@ const Contact: React.FC = () => {
                     className="bg-transparent border-border/50 resize-none"
                   />
                 </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full text-white" 
-                  style={{ backgroundColor: getThemeColor() }}
+
+                <Button
+                  type="submit"
+                  className="w-full text-white"
+                  style={{ backgroundColor: '#ffffff', color: '#000000' }}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

@@ -20,9 +20,9 @@ export const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <img 
-                src="/favicon.ico" 
-                alt="NewsScope Logo" 
+              <img
+                src="/favicon.ico"
+                alt="NewsScope Logo"
                 className="w-6 h-6"
               />
               <span className="text-xl font-bold">NewsScope</span>
@@ -31,24 +31,24 @@ export const Footer: React.FC = () => {
               Advanced AI-powered news detection platform helping you identify authentic news from misinformation.
             </p>
             <div className="flex space-x-3">
-              <a 
-                href="https://github.com/rohillamanas06-commits" 
-                target="_blank" 
+              <a
+                href="https://github.com/rohillamanas06-commits"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
               >
                 <Github className="h-4 w-4" />
               </a>
-              <a 
-                href="https://www.linkedin.com/in/manas-rohilla-b73415338/" 
-                target="_blank" 
+              <a
+                href="https://www.linkedin.com/in/manas-rohilla-b73415338/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
               >
                 <Linkedin className="h-4 w-4" />
               </a>
-              <a 
-                href="mailto:rohillamanas06@gmail.com" 
+              <a
+                href="mailto:rohillamanas06@gmail.com"
                 className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
               >
                 <Mail className="h-4 w-4" />
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
             <h3 className="font-semibold text-foreground">Product</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/detect')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -70,7 +70,7 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/learn')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -86,7 +86,7 @@ export const Footer: React.FC = () => {
             <h3 className="font-semibold text-foreground">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/about')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/contact')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -104,7 +104,7 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/faq')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -120,7 +120,7 @@ export const Footer: React.FC = () => {
             <h3 className="font-semibold text-foreground">Legal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/terms')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >
@@ -129,7 +129,7 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button 
+                <button
                   onClick={() => handleNavigation('/privacy')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
                 >

@@ -7,7 +7,7 @@ const Privacy: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
@@ -27,9 +27,9 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">1. Introduction</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  At NewsScope, we take your privacy seriously. This Privacy Policy explains how we collect, 
-                  use, disclose, and safeguard your information when you use our news verification service. 
-                  Please read this privacy policy carefully. By using NewsScope, you consent to the practices 
+                  At NewsScope, we take your privacy seriously. This Privacy Policy explains how we collect,
+                  use, disclose, and safeguard your information when you use our news verification service.
+                  Please read this privacy policy carefully. By using NewsScope, you consent to the practices
                   described in this policy.
                 </p>
               </section>
@@ -80,9 +80,9 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">4. Data Retention</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  News content submitted for analysis is processed in real-time and not permanently stored. 
-                  We retain analysis results for 30 days to allow you to access your history. Personal 
-                  information is retained as long as your account is active. You can request deletion of 
+                  News content submitted for analysis is processed in real-time and not permanently stored.
+                  We retain analysis results for 30 days to allow you to access your history. Personal
+                  information is retained as long as your account is active. You can request deletion of
                   your account and associated data at any time.
                 </p>
               </section>
@@ -90,7 +90,7 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">5. Information Sharing</h2>
                 <p className="text-muted-foreground leading-relaxed mb-3">
-                  We do not sell, trade, or rent your personal information to third parties. We may share 
+                  We do not sell, trade, or rent your personal information to third parties. We may share
                   information only in the following circumstances:
                 </p>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
@@ -104,9 +104,9 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">6. Security Measures</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  We implement appropriate technical and organizational security measures to protect your 
-                  personal information. This includes encryption, secure servers, and regular security audits. 
-                  However, no method of transmission over the internet is 100% secure, and we cannot guarantee 
+                  We implement appropriate technical and organizational security measures to protect your
+                  personal information. This includes encryption, secure servers, and regular security audits.
+                  However, no method of transmission over the internet is 100% secure, and we cannot guarantee
                   absolute security.
                 </p>
               </section>
@@ -132,8 +132,8 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">8. Cookies and Tracking</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  We use cookies and similar technologies to enhance your experience, analyze usage patterns, 
-                  and remember your preferences. You can control cookie settings through your browser. 
+                  We use cookies and similar technologies to enhance your experience, analyze usage patterns,
+                  and remember your preferences. You can control cookie settings through your browser.
                   Disabling cookies may affect some features of our service.
                 </p>
               </section>
@@ -141,8 +141,8 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">9. Children's Privacy</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  NewsScope is not intended for users under 13 years of age. We do not knowingly collect 
-                  personal information from children under 13. If we become aware that we have collected 
+                  NewsScope is not intended for users under 13 years of age. We do not knowingly collect
+                  personal information from children under 13. If we become aware that we have collected
                   information from a child under 13, we will delete it immediately.
                 </p>
               </section>
@@ -150,8 +150,8 @@ const Privacy: React.FC = () => {
               <section>
                 <h2 className="text-xl font-semibold mb-3">10. Changes to This Policy</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  We may update this Privacy Policy from time to time. We will notify you of any changes 
-                  by posting the new policy on this page and updating the "Last updated" date. Continued 
+                  We may update this Privacy Policy from time to time. We will notify you of any changes
+                  by posting the new policy on this page and updating the "Last updated" date. Continued
                   use of the service after changes constitutes acceptance of the updated policy.
                 </p>
               </section>

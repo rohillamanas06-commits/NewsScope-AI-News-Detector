@@ -80,23 +80,23 @@ const Index: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
             {/* Left side - Text content */}
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 mb-8 opacity-0 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 mb-8 animate-fade-in">
                 <Shield className="w-4 h-4 text-gold" />
                 <span className="text-sm font-medium text-gold">AI-Powered Fact Checking</span>
               </div>
 
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 opacity-0 animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 animate-slide-up" style={{ animationFillMode: 'forwards' }}>
                 <span className="text-foreground">Uncover the </span>
                 <span className="text-gradient">Truth</span>
                 <span className="text-foreground"> Behind Every Story</span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl lg:text-xl text-muted-foreground mb-10 leading-relaxed opacity-0 animate-slide-up" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+              <p className="text-base sm:text-lg md:text-xl lg:text-xl text-muted-foreground mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '50ms', animationFillMode: 'forwards' }}>
                 NewsScope uses advanced AI to analyze news articles, detect misinformation, 
                 and help you make informed decisions about what you read.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 w-full opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+              <div className="flex flex-col sm:flex-row gap-3 w-full animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
                 <Button variant="default" size="lg" asChild className="relative group bg-gold text-background hover:bg-gold-light shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.35)] font-bold w-full sm:w-auto px-10 py-6 text-base rounded-xl transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] overflow-hidden border border-white/10">
                   <Link to="/dashboard" className="flex items-center justify-center gap-2">
                     <span className="relative z-10 tracking-wide">Get Started</span>
@@ -108,7 +108,7 @@ const Index: React.FC = () => {
             </div>
 
             {/* Right side - News Images */}
-            <div className="relative opacity-0 animate-fade-in mt-12 md:mt-0" style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}>
+            <div className="relative animate-fade-in mt-12 md:mt-0" style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
               <div className="relative h-[350px] sm:h-[400px] md:h-[550px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto w-full max-w-md md:max-w-none">
                 {/* Image Grid */}
                 <div className="absolute inset-0 grid grid-cols-2 gap-2 sm:gap-3 p-3 sm:p-4 bg-card/50">

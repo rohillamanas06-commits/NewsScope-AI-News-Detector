@@ -7,7 +7,7 @@ const About: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
@@ -22,8 +22,8 @@ const About: React.FC = () => {
           <div className="bg-muted/30 rounded-2xl p-8 mb-12">
             <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
             <p className="text-muted-foreground leading-relaxed">
-              In an era of information overload, NewsScope empowers users to make informed decisions by providing 
-              accurate, AI-driven news verification. We believe everyone deserves access to truthful information 
+              In an era of information overload, NewsScope empowers users to make informed decisions by providing
+              accurate, AI-driven news verification. We believe everyone deserves access to truthful information
               and the tools to verify it.
             </p>
           </div>

@@ -1,23 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  LogOut, 
-  User, 
-  Menu, 
-  Settings, 
-  Search, 
-  Info, 
+import {
+  LogOut,
+  User,
+  Menu,
+  Search,
+  Info,
   Sidebar,
   LayoutDashboard,
   LogIn,
   Home,
-  Palette,
-  Leaf,
-  Zap,
   Coins
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -25,7 +21,7 @@ import { BuyCreditsModal } from '@/components/BuyCreditsModal';
 
 export const Navbar = () => {
   const { user, logout, isAuthenticated, credits, refreshCredits } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+
   const navigate = useNavigate();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showBuyCredits, setShowBuyCredits] = useState(false);
@@ -181,16 +177,7 @@ export const Navbar = () => {
                   </Button>
                 </>
               )}
-              <Button variant="ghost" onClick={toggleTheme} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                {theme === 'brown' && <Leaf className="h-4 w-4 mr-3 text-emerald-600" />}
-                {theme === 'green' && <Zap className="h-4 w-4 mr-3 text-purple-600" />}
-                {theme === 'purple' && <Palette className="h-4 w-4 mr-3 text-amber-700" />}
-                <span>
-                  {theme === 'brown' && 'Green Theme'}
-                  {theme === 'green' && 'Purple Theme'}
-                  {theme === 'purple' && 'Brown Theme'}
-                </span>
-              </Button>
+
               {isAuthenticated && (
                 <Button variant="ghost" onClick={() => handleNavigation('/about')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
                   <Info className="h-4 w-4 mr-3" />
