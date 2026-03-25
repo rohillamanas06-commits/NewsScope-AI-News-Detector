@@ -69,7 +69,6 @@ export const authApi = {
 // News Analysis API
 export interface AnalyzeRequest {
   text: string;
-  headline?: string;
 }
 
 export interface AnalyzeResponse {

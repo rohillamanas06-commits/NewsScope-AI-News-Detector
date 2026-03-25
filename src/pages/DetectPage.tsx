@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { 
   Search, 
   Loader2, 
-  Newspaper, 
   Link2, 
   FileText,
-  Sparkles,
-  AlertCircle
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -29,7 +27,6 @@ interface AnalysisResult {
 const DetectPage: React.FC = () => {
   const [newsText, setNewsText] = useState('');
   const [newsUrl, setNewsUrl] = useState('');
-  const [headline, setHeadline] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -53,8 +50,7 @@ const DetectPage: React.FC = () => {
     try {
       // Call the actual Flask backend API
       const response = await newsApi.analyzeNews({
-        text: content,
-        headline: headline || undefined
+        text: content
       });
 
       if (response.success && response.data) {
@@ -135,16 +131,6 @@ const DetectPage: React.FC = () => {
                 <div className="p-6 md:p-8">
                   <TabsContent value="text" className="mt-0 space-y-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">Headline (Optional)</label>
-                      <Input
-                        placeholder="Enter the news headline..."
-                        value={headline}
-                        onChange={(e) => setHeadline(e.target.value)}
-                        className="h-12"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
                       <label className="text-sm font-medium">News Content</label>
                       <Textarea
                         placeholder="Paste the news article or social media post you want to verify..."
@@ -213,37 +199,6 @@ const DetectPage: React.FC = () => {
                   </TabsContent>
                 </div>
               </Tabs>
-            </div>
-
-            {/* Info Cards */}
-            <div className="grid md:grid-cols-2 gap-4 mt-8">
-              <div className="p-5 bg-card rounded-xl border border-border">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <Newspaper className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Multi-Source Analysis</h3>
-                    <p className="text-sm text-muted-foreground">
-                      We cross-reference with 7+ trusted news sources and fact-checking organizations.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-5 bg-card rounded-xl border border-border">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/10">
-                    <AlertCircle className="w-5 h-5 text-amber-500" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Important Note</h3>
-                    <p className="text-sm text-muted-foreground">
-                      AI analysis is a tool, not a replacement for critical thinking. Always verify important news.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
