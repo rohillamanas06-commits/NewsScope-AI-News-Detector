@@ -9,7 +9,12 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import razorpay
+try:
+    import razorpay
+    RAZORPAY_IMPORT_ERROR = None
+except Exception as razorpay_import_error:
+    razorpay = None
+    RAZORPAY_IMPORT_ERROR = razorpay_import_error
 
 # Import database models and auth
 from models import db, User, AnalysisHistory, CreditTransaction, PaymentOrder
@@ -79,8 +84,10 @@ SENDGRID_TO_EMAIL = os.getenv('SENDGRID_TO_EMAIL', 'rohillamanas06@gmail.com')
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 razorpay_client = None
-if RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET:
+if razorpay and RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET:
     razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+elif RAZORPAY_IMPORT_ERROR:
+    print(f"Razorpay import unavailable: {RAZORPAY_IMPORT_ERROR}")
 
 # Credit packages - Same as ResuAI
 CREDIT_PACKAGES = {
