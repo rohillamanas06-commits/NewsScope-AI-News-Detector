@@ -10,8 +10,6 @@ import {
   AlertTriangle,
   HelpCircle,
   Trash2,
-  CheckSquare,
-  Square,
   AlertCircle,
   Coins,
   Plus,
@@ -19,7 +17,6 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { dashboardApi } from '@/services/api';
 import { useToast } from '@/hooks/use-toast';
@@ -50,10 +47,10 @@ const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentAnalyses, setRecentAnalyses] = useState<RecentAnalysis[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedAnalyses, setSelectedAnalyses] = useState<number[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false);
+  const [deleteIndividualDialogOpen, setDeleteIndividualDialogOpen] = useState(false);
+  const [selectedAnalysisForDelete, setSelectedAnalysisForDelete] = useState<number | null>(null);
   const [showBuyCredits, setShowBuyCredits] = useState(false);
   const { toast } = useToast();
   const { credits, refreshCredits } = useAuth();
@@ -116,50 +113,6 @@ const Dashboard: React.FC = () => {
     }).format(date);
   };
 
-  const handleSelectAnalysis = (analysisId: number, checked: boolean) => {
-    if (checked) {
-      setSelectedAnalyses(prev => [...prev, analysisId]);
-    } else {
-      setSelectedAnalyses(prev => prev.filter(id => id !== analysisId));
-    }
-  };
-
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedAnalyses(recentAnalyses.map(analysis => analysis.id));
-    } else {
-      setSelectedAnalyses([]);
-    }
-  };
-
-  const handleDeleteSelected = async () => {
-    if (selectedAnalyses.length === 0) return;
-    
-    setIsDeleting(true);
-    try {
-      await Promise.all(
-        selectedAnalyses.map(id => dashboardApi.deleteAnalysis(id))
-      );
-      
-      toast({
-        title: "Success",
-        description: `Deleted ${selectedAnalyses.length} analyses`,
-      });
-      
-      setSelectedAnalyses([]);
-      await fetchDashboardData();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete analyses",
-        variant: "destructive"
-      });
-    } finally {
-      setIsDeleting(false);
-      setDeleteDialogOpen(false);
-    }
-  };
-
   const handleDeleteAll = async () => {
     setIsDeleting(true);
     try {
@@ -170,7 +123,6 @@ const Dashboard: React.FC = () => {
         description: "All analyses deleted successfully",
       });
       
-      setSelectedAnalyses([]);
       await fetchDashboardData();
     } catch (error) {
       toast({
@@ -181,6 +133,32 @@ const Dashboard: React.FC = () => {
     } finally {
       setIsDeleting(false);
       setDeleteAllDialogOpen(false);
+    }
+  };
+
+  const handleDeleteIndividual = async () => {
+    if (!selectedAnalysisForDelete) return;
+    
+    setIsDeleting(true);
+    try {
+      await dashboardApi.deleteAnalysis(selectedAnalysisForDelete);
+      
+      toast({
+        title: "Success",
+        description: "Analysis deleted successfully",
+      });
+      
+      await fetchDashboardData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete analysis",
+        variant: "destructive"
+      });
+    } finally {
+      setIsDeleting(false);
+      setDeleteIndividualDialogOpen(false);
+      setSelectedAnalysisForDelete(null);
     }
   };
 
@@ -312,33 +290,18 @@ const Dashboard: React.FC = () => {
           {/* Recent Analyses */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   Recent Analyses
                 </CardTitle>
                 {recentAnalyses.length > 0 && (
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setDeleteAllDialogOpen(true)}
-                      className="text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto text-xs sm:text-sm"
-                    >
-                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                      <span className="truncate">Delete All</span>
-                    </Button>
-                    {selectedAnalyses.length > 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setDeleteDialogOpen(true)}
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50 w-full sm:w-auto text-xs sm:text-sm"
-                      >
-                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                        <span className="truncate">Delete ({selectedAnalyses.length})</span>
-                      </Button>
-                    )}
-                  </div>
+                  <button
+                    onClick={() => setDeleteAllDialogOpen(true)}
+                    className="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                    title="Delete all analyses"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                 )}
               </div>
             </CardHeader>
@@ -353,31 +316,13 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  {recentAnalyses.length > 0 && (
-                    <div className="flex items-center justify-between mb-4 p-2 bg-muted/30 rounded">
-                      <div className="flex items-center gap-2">
-                        <Checkbox
-                          checked={selectedAnalyses.length === recentAnalyses.length}
-                          onCheckedChange={handleSelectAll}
-                        />
-                        <span className="text-sm font-medium">
-                          Select All ({selectedAnalyses.length}/{recentAnalyses.length})
-                        </span>
-                      </div>
-                    </div>
-                  )}
                   <div className="space-y-4">
                     {recentAnalyses.map((analysis) => (
                       <div 
                         key={analysis.id}
                         className="p-4 rounded-lg border border-border hover:bg-muted/30 transition-colors"
                       >
-                        <div className="flex items-start gap-4">
-                          <Checkbox
-                            checked={selectedAnalyses.includes(analysis.id)}
-                            onCheckedChange={(checked) => handleSelectAnalysis(analysis.id, checked as boolean)}
-                            className="mt-1"
-                          />
+                        <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-start justify-between gap-4 mb-2">
                               <div className="flex-1">
@@ -400,6 +345,16 @@ const Dashboard: React.FC = () => {
                               <span>Confidence: {analysis.confidence}%</span>
                             </div>
                           </div>
+                          <button
+                            onClick={() => {
+                              setSelectedAnalysisForDelete(analysis.id);
+                              setDeleteIndividualDialogOpen(true);
+                            }}
+                            className="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors flex-shrink-0"
+                            title="Delete this analysis"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -410,31 +365,6 @@ const Dashboard: React.FC = () => {
           </Card>
         </div>
       </main>
-
-      {/* Delete Selected Dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-red-500" />
-              Delete Selected Analyses
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete {selectedAnalyses.length} selected analyses? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteSelected}
-              disabled={isDeleting}
-              className="bg-red-500 hover:bg-red-600"
-            >
-              {isDeleting ? 'Deleting...' : `Delete ${selectedAnalyses.length} analyses`}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       {/* Delete All Dialog */}
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
@@ -456,6 +386,31 @@ const Dashboard: React.FC = () => {
               className="bg-red-500 hover:bg-red-600"
             >
               {isDeleting ? 'Deleting...' : 'Delete All Analyses'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Individual Dialog */}
+      <AlertDialog open={deleteIndividualDialogOpen} onOpenChange={setDeleteIndividualDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              Delete Analysis
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this analysis? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteIndividual}
+              disabled={isDeleting}
+              className="bg-red-500 hover:bg-red-600"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete Analysis'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
