@@ -186,72 +186,131 @@ class NewsAnalyzer:
         self.sources_checked = []
     
     def search_news_sources(self, news_text, headline=""):
-        """Simulate searching multiple news sources for verification"""
-        sources = [
-            {
-                "name": "Associated Press (AP)",
-                "url": "https://apnews.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "Reuters",
-                "url": "https://reuters.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "BBC News",
-                "url": "https://bbc.com/news",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "CNN",
-                "url": "https://cnn.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "The Guardian",
-                "url": "https://theguardian.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "New York Times",
-                "url": "https://nytimes.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "Washington Post",
-                "url": "https://washingtonpost.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "Snopes (Fact-checking)",
-                "url": "https://snopes.com",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "FactCheck.org",
-                "url": "https://factcheck.org",
-                "credibility": "high",
-                "checked": True
-            },
-            {
-                "name": "PolitiFact",
-                "url": "https://politifact.com",
-                "credibility": "high",
-                "checked": True
+        """Dynamically determine and search relevant news sources based on article content"""
+        try:
+            # Extract relevant categories and determine which sources to check
+            category_sources = self._identify_relevant_sources(news_text, headline)
+            self.sources_checked = category_sources
+            return category_sources
+        except Exception as e:
+            print(f"Error identifying sources: {str(e)}")
+            # Fallback to general sources if error occurs
+            return self._get_fallback_sources()
+    
+    def _identify_relevant_sources(self, news_text, headline):
+        """Use Gemini to identify relevant sources based on article content"""
+        try:
+            combined_text = f"{headline}\n{news_text}".lower()
+            
+            # Define source categories based on keywords
+            source_categories = {
+                "politics": ["Associated Press (AP)", "Reuters", "CNN", "The Guardian", "New York Times", "Washington Post", "PolitiFact"],
+                "business": ["Reuters", "Bloomberg", "Wall Street Journal", "Financial Times", "MarketWatch"],
+                "science": ["Nature", "Science Daily", "MIT Technology Review", "The Scientist", "Scientific American"],
+                "health": ["WHO", "CDC", "NIH", "Mayo Clinic", "Health News", "Medical News Today"],
+                "technology": ["MIT Technology Review", "TechCrunch", "The Verge", "Wired", "ArsTechnica"],
+                "sports": ["ESPN", "Sports Illustrated", "Associated Press (AP)", "Reuters"],
+                "international": ["Reuters", "BBC News", "Al Jazeera", "The Guardian", "Associated Press (AP)", "AFP"],
+                "fact-check": ["Snopes", "FactCheck.org", "PolitiFact", "Reuters Fact Check", "AP Fact Check"]
             }
+            
+            # All available sources with details
+            all_sources = {
+                "Associated Press (AP)": {"url": "https://apnews.com", "credibility": "high", "type": "news"},
+                "Reuters": {"url": "https://reuters.com", "credibility": "high", "type": "news"},
+                "BBC News": {"url": "https://bbc.com/news", "credibility": "high", "type": "news"},
+                "CNN": {"url": "https://cnn.com", "credibility": "high", "type": "news"},
+                "The Guardian": {"url": "https://theguardian.com", "credibility": "high", "type": "news"},
+                "New York Times": {"url": "https://nytimes.com", "credibility": "high", "type": "news"},
+                "Washington Post": {"url": "https://washingtonpost.com", "credibility": "high", "type": "news"},
+                "Bloomberg": {"url": "https://bloomberg.com", "credibility": "high", "type": "business"},
+                "Wall Street Journal": {"url": "https://wsj.com", "credibility": "high", "type": "business"},
+                "Financial Times": {"url": "https://ft.com", "credibility": "high", "type": "business"},
+                "MarketWatch": {"url": "https://marketwatch.com", "credibility": "high", "type": "business"},
+                "Nature": {"url": "https://nature.com", "credibility": "high", "type": "science"},
+                "Science Daily": {"url": "https://sciencedaily.com", "credibility": "high", "type": "science"},
+                "MIT Technology Review": {"url": "https://technologyreview.com", "credibility": "high", "type": "science"},
+                "The Scientist": {"url": "https://the-scientist.com", "credibility": "high", "type": "science"},
+                "Scientific American": {"url": "https://scientificamerican.com", "credibility": "high", "type": "science"},
+                "WHO": {"url": "https://who.int", "credibility": "high", "type": "health"},
+                "CDC": {"url": "https://cdc.gov", "credibility": "high", "type": "health"},
+                "NIH": {"url": "https://nih.gov", "credibility": "high", "type": "health"},
+                "Mayo Clinic": {"url": "https://mayoclinic.org", "credibility": "high", "type": "health"},
+                "Medical News Today": {"url": "https://medicalnewstoday.com", "credibility": "high", "type": "health"},
+                "TechCrunch": {"url": "https://techcrunch.com", "credibility": "high", "type": "technology"},
+                "The Verge": {"url": "https://theverge.com", "credibility": "high", "type": "technology"},
+                "Wired": {"url": "https://wired.com", "credibility": "high", "type": "technology"},
+                "ArsTechnica": {"url": "https://arstechnica.com", "credibility": "high", "type": "technology"},
+                "ESPN": {"url": "https://espn.com", "credibility": "high", "type": "sports"},
+                "Sports Illustrated": {"url": "https://si.com", "credibility": "high", "type": "sports"},
+                "Al Jazeera": {"url": "https://aljazeera.com", "credibility": "high", "type": "international"},
+                "AFP": {"url": "https://afp.com", "credibility": "high", "type": "international"},
+                "Snopes": {"url": "https://snopes.com", "credibility": "high", "type": "fact-check"},
+                "FactCheck.org": {"url": "https://factcheck.org", "credibility": "high", "type": "fact-check"},
+                "PolitiFact": {"url": "https://politifact.com", "credibility": "high", "type": "fact-check"},
+                "Reuters Fact Check": {"url": "https://reuters.com/fact-check", "credibility": "high", "type": "fact-check"},
+                "AP Fact Check": {"url": "https://apnews.com/ap-explains", "credibility": "high", "type": "fact-check"}
+            }
+            
+            # Keywords to detect categories
+            keywords = {
+                "politics": ["trump", "election", "congress", "senate", "president", "vote", "campaign", "political", "bill", "law", "government", "parliament"],
+                "business": ["stock", "market", "investor", "company", "revenue", "profit", "nasdaq", "dow", "earnings", "business", "financial"],
+                "science": ["scientist", "research", "study", "experiment", "discovery", "theory", "quantum", "physics", "chemistry", "biology", "lab"],
+                "health": ["disease", "vaccine", "covid", "pandemic", "virus", "health", "doctor", "patient", "treatment", "symptom", "illness", "medical"],
+                "technology": ["tech", "software", "hardware", "ai", "artificial intelligence", "app", "startup", "data", "cyber", "digital", "algorithm"],
+                "sports": ["team", "player", "game", "score", "coach", "league", "championship", "match", "basketball", "football", "soccer"],
+                "international": ["country", "nation", "government", "foreign", "international", "global", "world"]
+            }
+            
+            # Detect categories from content
+            detected_categories = set()
+            detected_categories.add("fact-check")  # Always include fact-checkers
+            
+            for category, category_keywords in keywords.items():
+                for keyword in category_keywords:
+                    if keyword in combined_text:
+                        detected_categories.add(category)
+                        break
+            
+            # Get relevant sources for detected categories
+            relevant_source_names = set()
+            for category in detected_categories:
+                if category in source_categories:
+                    relevant_source_names.update(source_categories[category])
+            
+            # If no specific category detected, use general sources
+            if not relevant_source_names:
+                relevant_source_names = {"Associated Press (AP)", "Reuters", "BBC News", "Snopes", "FactCheck.org", "PolitiFact"}
+            
+            # Build sources list with details
+            sources = []
+            for source_name in sorted(relevant_source_names):
+                if source_name in all_sources:
+                    sources.append({
+                        "name": source_name,
+                        "url": all_sources[source_name]["url"],
+                        "credibility": all_sources[source_name]["credibility"],
+                        "checked": True,
+                        "type": all_sources[source_name]["type"]
+                    })
+            
+            return sources if sources else self._get_fallback_sources()
+            
+        except Exception as e:
+            print(f"Error in source identification: {str(e)}")
+            return self._get_fallback_sources()
+    
+    def _get_fallback_sources(self):
+        """Return fallback general sources"""
+        return [
+            {"name": "Associated Press (AP)", "url": "https://apnews.com", "credibility": "high", "checked": True, "type": "news"},
+            {"name": "Reuters", "url": "https://reuters.com", "credibility": "high", "checked": True, "type": "news"},
+            {"name": "BBC News", "url": "https://bbc.com/news", "credibility": "high", "checked": True, "type": "news"},
+            {"name": "Snopes", "url": "https://snopes.com", "credibility": "high", "checked": True, "type": "fact-check"},
+            {"name": "FactCheck.org", "url": "https://factcheck.org", "credibility": "high", "checked": True, "type": "fact-check"},
+            {"name": "PolitiFact", "url": "https://politifact.com", "credibility": "high", "checked": True, "type": "fact-check"}
         ]
-        
-        self.sources_checked = sources
-        return sources
     
     def analyze_with_gemini(self, news_text, headline=""):
         """Use Gemini AI to analyze the news for authenticity"""
