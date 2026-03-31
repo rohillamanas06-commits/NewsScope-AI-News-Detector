@@ -134,10 +134,6 @@ CREDIT_PACKAGES = {
 }
 
 
-# Initialize analyzer
-analyzer = NewsAnalyzer()
-
-
 # API Routes
 
 
