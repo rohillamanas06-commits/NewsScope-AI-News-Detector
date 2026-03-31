@@ -64,6 +64,12 @@ app.config['SESSION_COOKIE_DOMAIN'] = None  # Allow cross-domain cookies
 db.init_app(app)
 Session(app)
 
+# Startup logging
+print("[NewsScope] Initializing application...")
+print(f"[NewsScope] DATABASE_URL configured: {bool(os.getenv('DATABASE_URL'))}")
+print(f"[NewsScope] GEMINI_API_KEY configured: {bool(GEMINI_API_KEY)}")
+print(f"[NewsScope] Environment: {os.getenv('FLASK_ENV', 'development')}")
+
 # Enable CORS with credentials
 CORS(app, 
      resources={r"/api/*": {"origins": [
@@ -83,11 +89,27 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
 # Configure Gemini API
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY not found in environment variables")
+model = None
 
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
+def initialize_genai():
+    """Initialize Gemini API - called lazily when needed"""
+    global GEMINI_API_KEY, model
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY not found in environment variables")
+    if model is None:
+        try:
+            genai.configure(api_key=GEMINI_API_KEY)
+            model = genai.GenerativeModel('gemini-2.5-flash')
+        except Exception as e:
+            print(f"Error initializing Gemini API: {e}")
+            raise
+
+# Try to initialize on startup, but don't fail
+try:
+    if GEMINI_API_KEY:
+        initialize_genai()
+except Exception as e:
+    print(f"Warning: Gemini API initialization deferred - {e}")
 
 # Configure SendGrid API
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
@@ -329,6 +351,10 @@ class NewsAnalyzer:
     def analyze_with_gemini(self, news_text, headline=""):
         """Use Gemini AI to analyze the news for authenticity"""
         try:
+            # Ensure Gemini is initialized
+            if model is None:
+                initialize_genai()
+            
             prompt = f"""
 You are an expert fact-checker and news analyst. Analyze the following news article for authenticity.
 
