@@ -1073,7 +1073,6 @@ def internal_error(error):
 
 
 # Startup event handler for database initialization
-@app.before_serving
 def initialize_app():
     """Initialize database tables on app startup"""
     try:
@@ -1092,6 +1091,8 @@ if __name__ == '__main__':
     
     with app.app_context():
         print(f"Database Connected: {db.engine.url.database}")
+        # Initialize database on startup
+        initialize_app()
     
     port = int(os.getenv('PORT', 5000))
     print(f"Starting server on port {port}")
@@ -1102,3 +1103,11 @@ if __name__ == '__main__':
         port=port,
         debug=os.getenv('FLASK_ENV') != 'production'
     )
+
+
+# For Gunicorn/production: Initialize database on first app context
+with app.app_context():
+    try:
+        initialize_app()
+    except Exception as e:
+        print(f"Warning during app initialization: {e}")
