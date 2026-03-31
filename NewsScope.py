@@ -1073,13 +1073,12 @@ def internal_error(error):
 
 
 # Startup event handler for database initialization
-@app.before_first_request
+@app.before_serving
 def initialize_app():
     """Initialize database tables on app startup"""
     try:
-        with app.app_context():
-            db.create_all()
-            print("✓ Database tables created successfully!")
+        db.create_all()
+        print("✓ Database tables created successfully!")
     except Exception as e:
         print(f"⚠ Warning: Database initialization failed: {str(e)}")
         print("  The app will attempt to use existing tables.")
