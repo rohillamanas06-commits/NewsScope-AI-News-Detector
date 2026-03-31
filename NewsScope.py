@@ -64,6 +64,9 @@ app.config['SESSION_COOKIE_DOMAIN'] = None  # Allow cross-domain cookies
 db.init_app(app)
 Session(app)
 
+# Configure Gemini API - moved here for early initialization
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
 # Startup logging
 print("[NewsScope] Initializing application...")
 print(f"[NewsScope] DATABASE_URL configured: {bool(os.getenv('DATABASE_URL'))}")
@@ -87,8 +90,7 @@ CORS(app,
 # Register auth blueprint
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
-# Configure Gemini API
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+# Initialize Gemini model variable
 model = None
 
 def initialize_genai():
@@ -130,6 +132,13 @@ CREDIT_PACKAGES = {
     '20': {'credits': 20, 'price': 50, 'name': 'Starter Pack'},
     '100': {'credits': 100, 'price': 100, 'name': 'Pro Pack'}
 }
+
+
+# Initialize analyzer
+analyzer = NewsAnalyzer()
+
+
+# API Routes
 
 
 # Credit Management Functions
