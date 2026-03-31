@@ -1042,7 +1042,7 @@ def internal_error(error):
 
 
 # Startup event handler for database initialization
-@app.before_serving
+@app.before_first_request
 def initialize_app():
     """Initialize database tables on app startup"""
     try:
