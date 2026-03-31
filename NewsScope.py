@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from flask_session import Session
+from sqlalchemy import text
 import google.generativeai as genai
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
@@ -486,11 +487,23 @@ def home():
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
+    db_status = "error"
+    db_error = None
+    
+    try:
+        # Test database connection
+        db.session.execute(text('SELECT 1'))
+        db_status = "connected"
+    except Exception as e:
+        db_status = "disconnected"
+        db_error = str(e)
+    
     return jsonify({
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
         "gemini_api_configured": bool(GEMINI_API_KEY),
-        "database_connected": db.engine.url.database is not None
+        "database_status": db_status,
+        "database_error": db_error if db_status == "disconnected" else None
     })
 
 
@@ -1028,10 +1041,18 @@ def internal_error(error):
     }), 500
 
 
-# Initialize database
-with app.app_context():
-    db.create_all()
-    print("Database tables created successfully!")
+# Startup event handler for database initialization
+@app.before_serving
+def initialize_app():
+    """Initialize database tables on app startup"""
+    try:
+        with app.app_context():
+            db.create_all()
+            print("✓ Database tables created successfully!")
+    except Exception as e:
+        print(f"⚠ Warning: Database initialization failed: {str(e)}")
+        print("  The app will attempt to use existing tables.")
+
 
 if __name__ == '__main__':
     print("=" * 50)
