@@ -34,7 +34,19 @@ class User(db.Model):
     
     def check_password(self, password):
         """Check if provided password matches the hash"""
-        return check_password_hash(self.password_hash, password)
+        if not self.password_hash:
+            return False
+
+        try:
+            return check_password_hash(self.password_hash, password)
+        except (ValueError, TypeError):
+            # Backward compatibility for legacy records that may store
+            # plaintext passwords or malformed hashes.
+            if self.password_hash == password:
+                # Upgrade to a proper hash; caller commit will persist this.
+                self.password_hash = generate_password_hash(password)
+                return True
+            return False
     
     def generate_reset_token(self):
         """Generate a password reset token"""
