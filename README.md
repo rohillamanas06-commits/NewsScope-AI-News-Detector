@@ -1,5 +1,11 @@
 # 📰 NewsScope - AI-Powered Fake News Detector
 
+## 📸 Screenshots
+
+![NewsScope Screenshot 1](public/Screenshot%202026-04-01%20200656.png)
+![NewsScope Screenshot 2](public/Screenshot%202026-04-01%20201552.png)
+![NewsScope Screenshot 3](public/Screenshot%202026-04-01%20201654.png)
+
 ## 🌟 Overview
 
 NewsScope is a cutting-edge web application that leverages advanced AI technology to analyze news articles and detect misinformation. Built with React, TypeScript, and Google's Gemini AI, NewsScope helps users make informed decisions about the content they consume online.
