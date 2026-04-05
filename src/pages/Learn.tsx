@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Brain, Shield, Search, FileText, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
+import { FileText, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
 
 
 const Learn: React.FC = () => {
@@ -32,64 +32,7 @@ const Learn: React.FC = () => {
             </p>
           </div>
 
-          {/* How It Works Steps */}
-          <div className="space-y-8 mb-12">
-            <h2 className="text-2xl font-semibold text-center">Our Detection Process</h2>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Search className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">1. Content Analysis</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Our AI examines the text structure, writing style, and linguistic patterns
-                    to identify characteristics commonly found in fake news.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Brain className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">2. Source Verification</h3>
-                  <p className="text-sm text-muted-foreground">
-                    We cross-reference the information with trusted news sources and fact-checking
-                    organizations to verify claims and statements.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">3. Credibility Scoring</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Based on our analysis, we assign a credibility score indicating the likelihood
-                    that the content is authentic or fake.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-2">4. Detailed Report</h3>
-                  <p className="text-sm text-muted-foreground">
-                    You receive a comprehensive report with the credibility score, key findings,
-                    and red flags detected in the content.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* Red Flags */}
           <div className="bg-red-50 border border-red-200 rounded-2xl p-8 mb-12">

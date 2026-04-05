@@ -1,6 +1,5 @@
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Brain, Shield, Zap, Globe } from 'lucide-react';
 
 
 const About: React.FC = () => {
@@ -21,44 +20,14 @@ const About: React.FC = () => {
           {/* Mission Section */}
           <div className="bg-muted/30 rounded-2xl p-8 mb-12">
             <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              In an era of unprecedented information overload and rapid digital communication, NewsScope empowers users to make informed decisions by providing accurate, AI-driven news verification and fact-checking capabilities. We are committed to helping individuals and organizations distinguish between credible reporting and misleading or false information that can spread rapidly across social media and messaging platforms. We believe everyone deserves access to truthful, verified information and the tools to independently verify claims and statements.
+            </p>
             <p className="text-muted-foreground leading-relaxed">
-              In an era of information overload, NewsScope empowers users to make informed decisions by providing
-              accurate, AI-driven news verification. We believe everyone deserves access to truthful information
-              and the tools to verify it.
+              Our dedicated team is working tirelessly to develop advanced artificial intelligence and machine learning technologies that can analyze news content, verify sources, and provide comprehensive credibility assessments. We are passionate about combating misinformation and supporting media literacy in communities around the world.
             </p>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            <div className="p-6 rounded-xl border border-border bg-card">
-              <Brain className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-2">AI-Powered Analysis</h3>
-              <p className="text-sm text-muted-foreground">
-                Advanced machine learning algorithms analyze linguistic patterns and source credibility.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl border border-border bg-card">
-              <Globe className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-2">Multi-Source Verification</h3>
-              <p className="text-sm text-muted-foreground">
-                Cross-references information across multiple trusted news outlets.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl border border-border bg-card">
-              <Zap className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-2">Instant Results</h3>
-              <p className="text-sm text-muted-foreground">
-                Get comprehensive analysis results in seconds with real-time fact-checking.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl border border-border bg-card">
-              <Shield className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold mb-2">Trust Score</h3>
-              <p className="text-sm text-muted-foreground">
-                Receive detailed credibility scores with confidence levels and evidence.
-              </p>
-            </div>
-          </div>
         </div>
       </main>
     </div>

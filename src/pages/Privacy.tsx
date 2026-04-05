@@ -1,6 +1,5 @@
 import React from 'react';
 import { Navbar } from '@/components/Navbar';
-import { Shield } from 'lucide-react';
 
 
 const Privacy: React.FC = () => {
@@ -12,9 +11,6 @@ const Privacy: React.FC = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center p-3 rounded-full bg-primary/10 mb-4">
-              <Shield className="h-8 w-8 text-primary" />
-            </div>
             <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
             <p className="text-muted-foreground">
               Last updated: March 2026
