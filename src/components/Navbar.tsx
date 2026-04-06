@@ -8,7 +8,6 @@ import {
   Sidebar,
   LayoutDashboard,
   LogIn,
-  Home,
   Coins
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -159,12 +158,6 @@ export const Navbar = () => {
 
             {/* Middle Section - Navigation & Theme */}
             <div className="flex-1 py-6 space-y-2">
-              {/* Home Button - Always visible at top */}
-              <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
-                <Home className="h-4 w-4 mr-3" />
-                Home
-              </Button>
-              
               {isAuthenticated && (
                 <>
                   <Button variant="ghost" onClick={() => handleNavigation('/dashboard')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
