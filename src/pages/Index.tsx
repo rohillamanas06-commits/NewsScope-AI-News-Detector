@@ -1,166 +1,329 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Shield, 
-  ArrowRight,
-  Newspaper
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Navbar } from '@/components/Navbar';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
 import { Footer } from '@/components/Footer';
-import { VideoModal } from '@/components/VideoModal';
-import heroBg from '@/assets/hero-bg.jpg';
 
 const Index: React.FC = () => {
-  const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const requestRef = useRef<number>();
+  const opacityRef = useRef(0);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const [dots, setDots] = useState('.');
+  const [textIndex, setTextIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(true);
 
-  const newsImages = {
-    breaking: [
-      { url: 'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=800&h=400&fit=crop', title: 'Global News & Current Events' },
-      { url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop', label: 'World' },
-      { url: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400&h=300&fit=crop', label: 'Politics' }
-    ],
-    technology: [
-      { url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=400&fit=crop', title: 'Technology & Innovation' },
-      { url: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop', label: 'AI & ML' },
-      { url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop', label: 'Startups' }
-    ],
-    science: [
-      { url: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=400&fit=crop', title: 'Science & Research' },
-      { url: 'https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=400&h=300&fit=crop', label: 'Medicine' },
-      { url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop', label: 'Space' }
-    ],
-    business: [
-      { url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop', title: 'Business & Economy' },
-      { url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop', label: 'Finance' },
-      { url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', label: 'Market' }
-    ],
-    sports: [
-      { url: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=400&fit=crop', title: 'Sports & Athletics' },
-      { url: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=300&fit=crop', label: 'Football' },
-      { url: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&h=300&fit=crop', label: 'Olympics' }
-    ]
-  };
-
-  const genres = [
-    { id: 'breaking', label: 'Breaking' },
-    { id: 'technology', label: 'Tech' },
-    { id: 'science', label: 'Science' },
-    { id: 'business', label: 'Business' },
-    { id: 'sports', label: 'Sports' }
+  // Rotating text options
+  const rotatingTexts = [
+    'NewsScope uses advanced AI to detect misinformation.',
+    'Analyze news articles with cutting-edge technology.',
+    'Identify authentic news from misleading content.',
+    'Make informed decisions about what you read.',
+    'Empower yourself with truth and clarity.',
   ];
 
-  // Auto-rotate images every 1.5 seconds
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setSelectedGenre((prev) => (prev + 1) % genres.length);
-    }, 1500);
-    return () => clearInterval(interval);
+  // Detect mobile and redirect if on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      // Check if width is less than 768px (Tailwind md breakpoint)
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+
+      if (mobile) {
+        // Redirect based on auth status
+        const authToken = localStorage.getItem('authToken') ||
+                         localStorage.getItem('auth_token') ||
+                         localStorage.getItem('token') ||
+                         localStorage.getItem('user') ||
+                         localStorage.getItem('currentUser') ||
+                         sessionStorage.getItem('authToken') ||
+                         sessionStorage.getItem('user');
+        
+        if (authToken) {
+          window.location.href = '/dashboard';
+        } else {
+          window.location.href = '/login';
+        }
+      }
+    };
+
+    // Check on mount
+    checkMobile();
+
+    // Also check on window resize
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const currentGenre = genres[selectedGenre];
-  const currentImages = newsImages[currentGenre.id];
+  // Update video opacity with fade in/out logic
+  const updateOpacity = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || video.duration === 0) return;
+
+    const { currentTime, duration } = video;
+    let opacity = 1;
+
+    // Fade in over 0.5s at start
+    if (currentTime < 0.5) {
+      opacity = Math.max(0, currentTime / 0.5);
+    }
+    // Fade out over 0.5s before end
+    else if (currentTime > duration - 0.5) {
+      opacity = Math.max(0, (duration - currentTime) / 0.5);
+    }
+    // Full opacity in middle
+    else {
+      opacity = 1;
+    }
+
+    // Update DOM only if opacity changed significantly
+    if (Math.abs(opacity - opacityRef.current) > 0.01) {
+      opacityRef.current = opacity;
+      video.style.opacity = String(opacity);
+    }
+
+    requestRef.current = requestAnimationFrame(updateOpacity);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handlePlay = () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(updateOpacity);
+    };
+
+    const handlePause = () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+
+    const handleEnded = () => {
+      // Set opacity to 0
+      video.style.opacity = '0';
+      // Wait 100ms, then reset and play again
+      setTimeout(() => {
+        if (video) {
+          video.currentTime = 0;
+          video.play().catch((e) => console.warn('Video replay failed:', e.message));
+        }
+      }, 100);
+    };
+
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('pause', handlePause);
+    video.addEventListener('ended', handleEnded);
+
+    // Attempt autoplay
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log('Video autoplay started');
+      }).catch((e) => {
+        console.warn('Autoplay prevented:', e.message);
+        // Fallback: play on user interaction
+        const handleInteraction = () => {
+          video.play().catch((err) => console.warn('Play failed:', err.message));
+          document.removeEventListener('click', handleInteraction);
+          window.removeEventListener('touchstart', handleInteraction);
+        };
+        document.addEventListener('click', handleInteraction, { once: true });
+        window.addEventListener('touchstart', handleInteraction, { once: true });
+      });
+    }
+
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('pause', handlePause);
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, [updateOpacity]);
+
+  // Show loading screen after 9 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoadingScreen(true);
+    }, 9000); // 9 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Rotate text every 1.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % rotatingTexts.length);
+    }, 1500); // 1.5 seconds
+
+    return () => clearInterval(interval);
+  }, [rotatingTexts.length]);
+
+  // Handle background audio - play on user click
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleClick = () => {
+      // Play audio on first click
+      audio.play().catch((e) => console.warn('Audio play failed:', e.message));
+      // Remove listener after first click to avoid repeating
+      document.removeEventListener('click', handleClick);
+    };
+
+    // Stop audio when loading screen appears (before navigation)
+    if (showLoadingScreen && audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    } else {
+      // Add click listener when not showing loading screen
+      document.addEventListener('click', handleClick);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      if (audio && showLoadingScreen) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [showLoadingScreen]);
+
+  // Handle 3-second loading screen and redirect
+  useEffect(() => {
+    if (!showLoadingScreen) return;
+
+    const timer = setTimeout(() => {
+      // Check multiple possible auth storage keys
+      const authToken = localStorage.getItem('authToken') ||
+                       localStorage.getItem('auth_token') ||
+                       localStorage.getItem('token') ||
+                       localStorage.getItem('user') ||
+                       localStorage.getItem('currentUser') ||
+                       sessionStorage.getItem('authToken') ||
+                       sessionStorage.getItem('user');
+      
+      console.log('Auth check:', { authToken }); // Debug log
+      
+      if (authToken) {
+        window.location.href = '/dashboard';
+      } else {
+        window.location.href = '/login';
+      }
+    }, 3000); // 3 seconds
+
+    return () => clearTimeout(timer);
+  }, [showLoadingScreen]);
+
+  // Animate loading dots
+  useEffect(() => {
+    if (!showLoadingScreen) return;
+
+    const interval = setInterval(() => {
+      setDots((prev) => {
+        if (prev === '.') return '..';
+        if (prev === '..') return '...';
+        return '.';
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [showLoadingScreen]);
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
-      <Navbar />
+    <div className="relative w-full overflow-visible bg-white">
+      {/* Only show desktop version */}
+      {!isMobile ? (
+        <>
+          {/* Background Audio */}
+          <audio
+            ref={audioRef}
+            src="/dbsound-forest-path-avala-mountains-246781.mp3"
+            loop
+            muted={false}
+            preload="auto"
+            className="hidden"
+          />
 
-      {/* Hero Section */}
-      <section className="relative py-16 md:py-0 md:min-h-screen flex items-center overflow-hidden bg-background">
-        
-        
-        <div className="container mx-auto px-4 relative z-10 pt-20">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-            {/* Left side - Text content */}
-            <div className="max-w-2xl">
+      {/* Hero Section Container */}
+      <section
+        className="relative w-full overflow-hidden bg-white flex flex-col items-center justify-start text-center px-6"
+        style={{
+          paddingTop: '5rem',
+          paddingBottom: '10rem',
+          height: '100vh',
+        }}
+      >
+        {/* Video Background */}
+        <video
+          ref={videoRef}
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4"
+          className="absolute inset-0 z-0 w-full h-full object-cover"
+          style={{
+            objectPosition: 'center -80%',
+            willChange: 'opacity',
+            opacity: 1,
+          }}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+        />
+
+        {/* Gradient Overlay - Removed for clean sky */}
+        <div className="absolute inset-0 bg-transparent z-[1] pointer-events-none" />
+
+        {/* Content Container */}
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center justify-center">
+          {/* Headline */}
+          <h1
+            className="text-5xl sm:text-7xl md:text-8xl max-w-7xl font-normal text-black animate-fade-rise"
+            style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              lineHeight: 0.95,
+              letterSpacing: '-2.46px',
+            }}
+          >
+            Uncover the <span className="text-gray-400 italic">Truth</span>{' '}
+            Behind <span className="text-gray-400 italic">Every</span> Story
+          </h1>
+
+          {/* Description */}
+          <p
+            className="text-base sm:text-lg max-w-2xl mt-8 leading-relaxed text-gray-500 animate-fade-rise-delay min-h-[28px]"
+            style={{
+              fontFamily: "'Inter', system-ui, sans-serif",
+              transition: 'opacity 0.3s ease-in-out',
+            }}
+          >
+            {rotatingTexts[textIndex]}
+          </p>
 
 
-              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 animate-slide-up" style={{ animationFillMode: 'forwards' }}>
-                <span className="text-foreground">Uncover the </span>
-                <span className="text-gradient">Truth</span>
-                <span className="text-foreground"> Behind Every Story</span>
-              </h1>
-
-              <p className="text-base sm:text-lg md:text-xl lg:text-xl text-muted-foreground mb-10 leading-relaxed animate-slide-up" style={{ animationDelay: '50ms', animationFillMode: 'forwards' }}>
-                NewsScope uses advanced AI to analyze news articles, detect misinformation, 
-                and help you make informed decisions about what you read.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full animate-slide-up" style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}>
-                <Button variant="default" size="lg" asChild className="relative group bg-gold text-background hover:bg-gold-light shadow-[0_4px_24px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_32px_rgba(0,0,0,0.35)] font-bold w-full sm:w-auto px-10 py-6 text-base rounded-xl transition-all duration-300 hover:scale-[1.04] active:scale-[0.97] overflow-hidden border border-white/10">
-                  <Link to="/dashboard" className="flex items-center justify-center gap-2">
-                    <span className="relative z-10 tracking-wide">Get Started</span>
-                    <ArrowRight className="relative z-10 w-5 h-5 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
-                    <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            {/* Right side - News Images */}
-            <div className="relative animate-fade-in mt-12 md:mt-0" style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
-              <div className="relative h-[350px] sm:h-[400px] md:h-[550px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-border/50 mx-auto w-full max-w-md md:max-w-none">
-                {/* Image Grid */}
-                <div className="absolute inset-0 grid grid-cols-2 gap-2 sm:gap-3 p-3 sm:p-4 bg-card/50">
-                  {/* Large featured image */}
-                  <div className="col-span-2 h-[180px] sm:h-[240px] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 relative group">
-                    <img 
-                      key={currentImages[0].url}
-                      src={currentImages[0].url}
-                      alt="News" 
-                      className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <span className="text-xs text-gold font-semibold uppercase">{currentGenre.label}</span>
-                      <h4 className="text-white font-bold text-lg mt-1">{currentImages[0].title}</h4>
-                    </div>
-                  </div>
-                  
-                  {/* Smaller images */}
-                  <div className="h-[140px] sm:h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-blue-700 relative group">
-                    <img 
-                      key={currentImages[1].url}
-                      src={currentImages[1].url}
-                      alt="News" 
-                      className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <span className="text-xs text-gold font-medium">{currentImages[1].label}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="h-[140px] sm:h-[200px] rounded-xl overflow-hidden bg-gradient-to-br from-purple-700 via-purple-600 to-purple-700 relative group">
-                    <img 
-                      key={currentImages[2].url}
-                      src={currentImages[2].url}
-                      alt="News" 
-                      className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <span className="text-xs text-gold font-medium">{currentImages[2].label}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Decorative elements */}
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="px-3 py-1 bg-background/80 backdrop-blur-sm rounded-full border border-gold/40">
-                    <span className="text-xs text-gold font-mono font-semibold">NEWS GALLERY</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
+      {/* Footer */}
       <Footer />
 
-      <VideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      {/* Loading Screen Overlay */}
+      {showLoadingScreen && (
+        <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+          <div className="text-center">
+            <h2
+              className="text-2xl sm:text-3xl md:text-4xl font-normal text-white animate-fade-rise"
+              style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+              }}
+            >
+              Getting things ready{dots}
+            </h2>
+          </div>
+        </div>
+      )}
+        </>
+      ) : (
+        <div className="w-full h-screen bg-white flex items-center justify-center">
+          {/* Redirecting message for mobile */}
+        </div>
+      )}
     </div>
   );
 };

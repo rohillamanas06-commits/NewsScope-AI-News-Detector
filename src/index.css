@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import './styles/fonts.css';
+@import './styles/theme.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
   :root,
   [data-theme="dark"] {
     /* Dark Theme — black background, white text */
@@ -84,13 +86,13 @@
   h4,
   h5,
   h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
 
   .font-body {
@@ -215,7 +217,8 @@
 }
 
 /* HTML and Body consistency to prevent white flashes */
-html, body {
+html,
+body {
   background-color: hsl(var(--background));
 }
 
