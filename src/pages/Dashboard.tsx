@@ -190,56 +190,56 @@ const Dashboard: React.FC = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Analyses</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold text-muted-foreground">Total Analyses</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats?.total_analyses || 0}</div>
-                <p className="text-xs text-muted-foreground mt-1">
+              <CardContent className="space-y-2">
+                <div className="text-4xl font-bold text-white">{stats?.total_analyses || 0}</div>
+                <p className="text-sm text-muted-foreground">
                   All time
                 </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Authentic News</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold text-muted-foreground">Authentic News</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-emerald-500">
+              <CardContent className="space-y-2">
+                <div className="text-4xl font-bold text-emerald-500">
                   {stats?.verdict_distribution.REAL || 0}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground">
                   Verified as real
                 </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">False News</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold text-muted-foreground">False News</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-red-500">
+              <CardContent className="space-y-2">
+                <div className="text-4xl font-bold text-red-500">
                   {stats?.verdict_distribution.FAKE || 0}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground">
                   Flagged as fake
                 </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Last Analysis</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold text-muted-foreground">Last Analysis</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-sm font-medium">
+              <CardContent className="space-y-2">
+                <div className="text-lg font-semibold text-white">
                   {stats?.last_analysis 
                     ? formatDate(stats.last_analysis)
                     : 'No analyses yet'}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground">
                   Most recent check
                 </p>
               </CardContent>
