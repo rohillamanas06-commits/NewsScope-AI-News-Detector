@@ -87,6 +87,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     const response = await authApi.login(email, password);
     if (response.success && response.user) {
+      // Save user info to localStorage
+      localStorage.setItem('user', JSON.stringify(response.user));
       setUser(response.user);
       setCredits(response.user.credits || 0);
     } else {
@@ -96,6 +98,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     await authApi.logout();
+    // Clear localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('token');
     setUser(null);
     setCredits(0);
   };

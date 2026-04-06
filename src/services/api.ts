@@ -7,30 +7,28 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Helper function for API calls
 async function apiCall(endpoint: string, options: RequestInit = {}) {
-  // Get token from localStorage
-  const token = localStorage.getItem('authToken') ||
-                localStorage.getItem('auth_token') ||
-                localStorage.getItem('token');
-
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
-
-  // Add Authorization header if token exists
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    credentials: 'include', // Important for session cookies
-    headers,
+    credentials: 'include', // Include cookies for session auth
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
-  const data = await response.json();
+  // Handle JSON parsing, with fallback for non-JSON responses
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    data = { success: !response.ok, message: response.statusText };
+  }
 
   if (!response.ok) {
+    // Silently handle 401 for auth check on page load
+    if (response.status === 401 && endpoint === '/api/auth/me') {
+      return { success: false, user: null };
+    }
     throw new Error(data.message || data.error || 'Request failed');
   }
 
