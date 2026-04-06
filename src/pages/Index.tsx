@@ -67,13 +67,7 @@ const Index: React.FC = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-16 md:py-0 md:min-h-screen flex items-center overflow-hidden bg-muted/30">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+      <section className="relative py-16 md:py-0 md:min-h-screen flex items-center overflow-hidden bg-background">
         
         
         <div className="container mx-auto px-4 relative z-10 pt-20">
@@ -159,10 +153,6 @@ const Index: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -z-10 -top-6 -right-6 w-full h-full bg-gradient-to-br from-gold/10 to-transparent rounded-3xl blur-xl" />
-              <div className="absolute -z-20 -top-10 -right-10 w-full h-full bg-gradient-to-br from-gold/5 to-transparent rounded-3xl blur-2xl" />
             </div>
           </div>
         </div>
