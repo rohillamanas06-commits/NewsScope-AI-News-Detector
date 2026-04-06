@@ -7,13 +7,25 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Helper function for API calls
 async function apiCall(endpoint: string, options: RequestInit = {}) {
+  // Get token from localStorage
+  const token = localStorage.getItem('authToken') ||
+                localStorage.getItem('auth_token') ||
+                localStorage.getItem('token');
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+
+  // Add Authorization header if token exists
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     credentials: 'include', // Important for session cookies
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+    headers,
   });
 
   const data = await response.json();

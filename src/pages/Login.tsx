@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,10 +13,21 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Detect mobile and update on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,11 +167,14 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">
-              ← Back to Home
-            </Link>
-          </div>
+          {/* Back to Home - Hidden on mobile */}
+          {!isMobile && (
+            <div className="mt-6 text-center text-sm text-muted-foreground">
+              <Link to="/" className="hover:text-foreground">
+                ← Back to Home
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
