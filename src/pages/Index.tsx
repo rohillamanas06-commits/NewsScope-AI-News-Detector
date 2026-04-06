@@ -9,7 +9,7 @@ const Index: React.FC = () => {
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   const [dots, setDots] = useState('.');
   const [textIndex, setTextIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Rotating text options
   const rotatingTexts = [
@@ -28,14 +28,12 @@ const Index: React.FC = () => {
       setIsMobile(mobile);
 
       if (mobile) {
-        // Redirect based on auth status
+        // Redirect based on auth status - only check actual token keys
         const authToken = localStorage.getItem('authToken') ||
                          localStorage.getItem('auth_token') ||
                          localStorage.getItem('token') ||
-                         localStorage.getItem('user') ||
-                         localStorage.getItem('currentUser') ||
                          sessionStorage.getItem('authToken') ||
-                         sessionStorage.getItem('user');
+                         sessionStorage.getItem('auth_token');
         
         if (authToken) {
           window.location.href = '/dashboard';
