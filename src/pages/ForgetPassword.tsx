@@ -65,8 +65,7 @@ const ForgotPassword: React.FC = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-4">
-            <img src="/favicon.ico" alt="NewsScope" className="w-12 h-12" />
-            <span className="text-2xl font-bold">NewsScope</span>
+            
           </Link>
           <h1 className="text-3xl font-display font-bold mb-2">Forgot Password?</h1>
           <p className="text-muted-foreground">
