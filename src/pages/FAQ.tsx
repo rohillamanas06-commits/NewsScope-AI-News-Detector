@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, HelpCircle, ArrowLeft } from 'lucide-react';
 
 
 interface FAQItemProps {
@@ -28,6 +28,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick }) 
 );
 
 const FAQ: React.FC = () => {
+  const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
@@ -75,9 +76,15 @@ const FAQ: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-4 left-4 z-50 p-2 hover:bg-muted rounded-lg transition-colors"
+        aria-label="Back to home"
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
 
-      <main className="pt-20 pb-16">
+      <main className="pt-8 pb-16">
         <div className="container mx-auto px-4 max-w-3xl">
           {/* Header */}
           <div className="text-center mb-12">

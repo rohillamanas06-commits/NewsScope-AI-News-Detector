@@ -1,13 +1,21 @@
 import React from 'react';
-import { Navbar } from '@/components/Navbar';
-
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const Privacy: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-4 left-4 z-50 p-2 hover:bg-muted rounded-lg transition-colors"
+        aria-label="Back to home"
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
 
-      <main className="pt-20 pb-16">
+      <main className="pt-8 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
           <div className="text-center mb-12">
