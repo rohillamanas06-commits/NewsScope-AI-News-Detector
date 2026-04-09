@@ -1,13 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn } from 'lucide-react';
+import { LogIn, LayoutDashboard } from 'lucide-react';
 import { Footer } from '@/components/Footer';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   // Detect mobile and redirect if on mobile
   useEffect(() => {
@@ -85,13 +87,22 @@ const Index: React.FC = () => {
               }}
             >
               <div className="px-6 py-4 flex items-center justify-end relative h-16">
-                {/* Sign In Button */}
+                {/* Sign In / Dive In Button */}
                 <button
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
                   className="px-5 py-2 bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
                 >
-                  <LogIn size={18} />
-                  Sign In
+                  {isAuthenticated ? (
+                    <>
+                      <LayoutDashboard size={18} />
+                      Dive In
+                    </>
+                  ) : (
+                    <>
+                      <LogIn size={18} />
+                      Sign In
+                    </>
+                  )}
                 </button>
               </div>
             </nav>

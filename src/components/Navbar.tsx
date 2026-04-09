@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   LogOut,
   User,
@@ -8,7 +8,8 @@ import {
   Sidebar,
   LayoutDashboard,
   LogIn,
-  Coins
+  Coins,
+  Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -22,9 +23,11 @@ export const Navbar = () => {
   const { user, logout, isAuthenticated, credits, refreshCredits } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showBuyCredits, setShowBuyCredits] = useState(false);
   const isMobile = useIsMobile();
+  const isHomePage = location.pathname === '/';
 
   // Lock body scroll on mobile when sidebar is open
   useEffect(() => {
@@ -84,6 +87,19 @@ export const Navbar = () => {
               >
                 <LogIn className="h-4 w-4" />
                 Login
+              </Button>
+            )}
+            
+            {/* Dive In Button - Show when authenticated on home page */}
+            {isAuthenticated && isHomePage && (
+              <Button 
+                variant="default" 
+                size="sm" 
+                onClick={() => navigate('/dashboard')}
+                className="hidden md:flex items-center gap-2"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dive In
               </Button>
             )}
             
@@ -158,6 +174,13 @@ export const Navbar = () => {
 
             {/* Middle Section - Navigation & Theme */}
             <div className="flex-1 py-6 space-y-2">
+              {/* Home Button - Desktop Only */}
+              {!isMobile && (
+                <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+                  <Home className="h-4 w-4 mr-3" />
+                  Home
+                </Button>
+              )}
               {isAuthenticated && (
                 <>
                   <Button variant="ghost" onClick={() => handleNavigation('/dashboard')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
