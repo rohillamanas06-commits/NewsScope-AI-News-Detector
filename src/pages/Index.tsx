@@ -82,8 +82,8 @@ const Index: React.FC = () => {
             pointerEvents: 'auto',
           }}
         >
-          <div className="px-6 py-2 flex items-center justify-between relative h-12">
-            {/* Mobile Menu Button */}
+          <div className="px-6 py-2 flex items-center h-12">
+            {/* Mobile Menu Button - Left Side */}
             {isMobile && (
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -93,32 +93,34 @@ const Index: React.FC = () => {
               </button>
             )}
 
-            {/* Sign In / Dive In Button */}
-            {isMobile ? (
-              <button
-                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
-              >
-                {isAuthenticated ? 'Dive In' : 'Sign In'}
-              </button>
-            ) : (
-              <button
-                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                className="px-5 py-2 bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
-              >
-                {isAuthenticated ? (
-                  <>
-                    <LayoutDashboard size={18} />
-                    Dive In
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={18} />
-                    Sign In
-                  </>
-                )}
-              </button>
-            )}
+            {/* Sign In / Dive In Button - Right Side */}
+            <div className="ml-auto">
+              {isMobile ? (
+                <button
+                  onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                  className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200"
+                >
+                  {isAuthenticated ? 'Dive In' : 'Sign In'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                  className="px-5 py-2 bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
+                >
+                  {isAuthenticated ? (
+                    <>
+                      <LayoutDashboard size={18} />
+                      Dive In
+                    </>
+                  ) : (
+                    <>
+                      <LogIn size={18} />
+                      Sign In
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Dropdown */}
