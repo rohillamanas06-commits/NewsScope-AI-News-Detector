@@ -8,8 +8,12 @@ const Index: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+
+  // Array of news images to rotate through
+  const newsImages = ['/new1.jpg'];
 
   // Detect mobile and redirect if on mobile
   useEffect(() => {
@@ -52,14 +56,23 @@ const Index: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Image carousel - rotate every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % newsImages.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [newsImages.length]);
+
   return (
-    <div className="relative w-full overflow-visible bg-white">
+    <div className="relative w-full overflow-visible">
       {/* Only show desktop version */}
       {!isMobile ? (
         <>
           {/* Hero Section Container */}
           <section
-            className="relative w-full overflow-hidden bg-white flex flex-col items-center justify-start text-center px-6"
+            className="relative w-full overflow-hidden flex flex-col items-center justify-start text-center px-6"
             style={{
               paddingTop: '5rem',
               paddingBottom: '10rem',
@@ -69,9 +82,9 @@ const Index: React.FC = () => {
             {/* Picture Background */}
             <img
               ref={imageRef}
-              src="/egor-vikhrev-C7dZP5JoTzc-unsplash (1).jpg"
+              src={newsImages[currentImageIndex]}
               alt="Hero background"
-              className="absolute inset-0 z-0 w-full h-full object-cover"
+              className="absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500"
               style={{
                 objectPosition: 'center 30%',
               }}
@@ -80,13 +93,13 @@ const Index: React.FC = () => {
             {/* Black Navbar */}
             <nav className="fixed top-0 left-0 right-0 z-30 w-full transition-all duration-300"
               style={{
-                background: isScrolled ? '#000000' : 'transparent',
-                borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-                opacity: isScrolled ? 1 : 0,
-                pointerEvents: isScrolled ? 'auto' : 'none',
+                background: '#000000',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                opacity: 1,
+                pointerEvents: 'auto',
               }}
             >
-              <div className="px-6 py-4 flex items-center justify-end relative h-16">
+              <div className="px-6 py-2 flex items-center justify-end relative h-12">
                 {/* Sign In / Dive In Button */}
                 <button
                   onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
