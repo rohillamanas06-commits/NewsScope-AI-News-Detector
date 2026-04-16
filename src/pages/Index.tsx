@@ -103,12 +103,14 @@ const Index: React.FC = () => {
             )}
 
             {/* Mobile Sign In Button */}
-            <button
-              onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-              className="md:hidden px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
-            >
-              {isAuthenticated ? 'Dive In' : 'Sign In'}
-            </button>
+            {isMobile && (
+              <button
+                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
+              >
+                {isAuthenticated ? 'Dive In' : 'Sign In'}
+              </button>
+            )}
           </div>
 
         </nav>
