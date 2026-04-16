@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, LayoutDashboard } from 'lucide-react';
+import { LogIn, LayoutDashboard, Menu, X } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -9,6 +9,7 @@ const Index: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -81,7 +82,17 @@ const Index: React.FC = () => {
             pointerEvents: 'auto',
           }}
         >
-          <div className="px-6 py-2 flex items-center justify-end relative h-12">
+          <div className="px-6 py-2 flex items-center justify-between relative h-12">
+            {/* Mobile Menu Button */}
+            {isMobile && (
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-white"
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            )}
+
             {/* Sign In / Dive In Button */}
             {isMobile ? (
               <button
@@ -110,6 +121,16 @@ const Index: React.FC = () => {
             )}
           </div>
 
+          {/* Mobile Menu Dropdown */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-white/10 bg-black/95 px-4 py-4 space-y-3">
+              <a href="/about" className="block text-sm text-white/60 hover:text-white transition-colors py-2">About</a>
+              <a href="/contact" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Contact</a>
+              <a href="/faq" className="block text-sm text-white/60 hover:text-white transition-colors py-2">FAQ</a>
+              <a href="/terms" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Terms</a>
+              <a href="/privacy" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Privacy</a>
+            </div>
+          )}
         </nav>
 
         {/* Gradient Overlay - Removed for clean sky */}
