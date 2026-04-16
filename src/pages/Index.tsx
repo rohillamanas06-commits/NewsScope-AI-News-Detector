@@ -112,30 +112,19 @@ const Index: React.FC = () => {
                 <MoreVertical size={24} />
               </button>
             )}
+
+            {/* Mobile Sign In Button */}
+            <button
+              onClick={() => navigate(isAuthenticated ? '/chat' : '/auth')}
+              className="md:hidden px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
+            >
+              {isAuthenticated ? 'Chat' : 'Sign In'}
+            </button>
           </div>
 
           {/* Mobile Menu Dropdown */}
           {isMobile && isMenuOpen && (
             <div className="md:hidden border-t border-white/10 bg-black/95 px-4 py-4 space-y-3">
-              <button
-                onClick={() => {
-                  navigate(isAuthenticated ? '/dashboard' : '/login');
-                  setIsMenuOpen(false);
-                }}
-                className="w-full text-left text-sm text-white hover:text-white/80 transition-colors py-2 px-2 font-medium flex items-center gap-2"
-              >
-                {isAuthenticated ? (
-                  <>
-                    <LayoutDashboard size={16} />
-                    Dive In
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={16} />
-                    Sign In
-                  </>
-                )}
-              </button>
               <a href="/about" className="block text-sm text-white/60 hover:text-white transition-colors py-2">About</a>
               <a href="/contact" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Contact</a>
               <a href="/faq" className="block text-sm text-white/60 hover:text-white transition-colors py-2">FAQ</a>
