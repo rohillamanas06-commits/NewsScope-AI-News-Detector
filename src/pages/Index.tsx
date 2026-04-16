@@ -144,7 +144,6 @@ const Index: React.FC = () => {
             </div>
           )}
         </nav>
-        </nav>
 
         {/* Gradient Overlay - Removed for clean sky */}
         <div className="absolute inset-0 bg-transparent z-[1] pointer-events-none" />
