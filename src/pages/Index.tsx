@@ -82,7 +82,7 @@ const Index: React.FC = () => {
             pointerEvents: 'auto',
           }}
         >
-          <div className="px-6 py-2 flex items-center h-12">
+          <div className="px-6 py-2 flex items-center justify-between h-12">
             {/* Mobile Menu Button - Left Side */}
             {isMobile && (
               <button
@@ -94,15 +94,15 @@ const Index: React.FC = () => {
             )}
 
             {/* Sign In / Dive In Button - Right Side */}
-            <div className="ml-auto">
-              {isMobile ? (
-                <button
-                  onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                  className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200"
-                >
-                  {isAuthenticated ? 'Dive In' : 'Sign In'}
-                </button>
-              ) : (
+            {isMobile ? (
+              <button
+                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200"
+              >
+                {isAuthenticated ? 'Dive In' : 'Sign In'}
+              </button>
+            ) : (
+              <div className="ml-auto">
                 <button
                   onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
                   className="px-5 py-2 bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
@@ -119,8 +119,8 @@ const Index: React.FC = () => {
                     </>
                   )}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Dropdown */}
