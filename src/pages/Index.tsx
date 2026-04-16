@@ -86,19 +86,9 @@ const Index: React.FC = () => {
             {isMobile ? (
               <button
                 onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                className="px-4 py-2 text-sm bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg transition-all duration-300 flex items-center gap-2"
+                className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
               >
-                {isAuthenticated ? (
-                  <>
-                    <LayoutDashboard size={16} />
-                    Dive In
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={16} />
-                    Sign In
-                  </>
-                )}
+                {isAuthenticated ? 'Dive In' : 'Sign In'}
               </button>
             ) : (
               <button
