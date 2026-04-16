@@ -105,41 +105,45 @@ const Index: React.FC = () => {
 
             {/* Three Dots Menu - Mobile Only */}
             {isMobile && (
-              <div className="relative">
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="p-2 text-white hover:opacity-80 transition-all duration-300 flex items-center"
-                >
-                  <MoreVertical size={24} />
-                </button>
-
-                {/* Dropdown Menu */}
-                {isMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg border border-gray-700 z-40">
-                    <button
-                      onClick={() => {
-                        navigate(isAuthenticated ? '/dashboard' : '/login');
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full px-4 py-3 text-white hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 rounded-lg"
-                    >
-                      {isAuthenticated ? (
-                        <>
-                          <LayoutDashboard size={18} />
-                          Dive In
-                        </>
-                      ) : (
-                        <>
-                          <LogIn size={18} />
-                          Sign In
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-              </div>
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 text-white hover:opacity-80 transition-all duration-300 flex items-center"
+              >
+                <MoreVertical size={24} />
+              </button>
             )}
           </div>
+
+          {/* Mobile Menu Dropdown */}
+          {isMobile && isMenuOpen && (
+            <div className="md:hidden border-t border-white/10 bg-black/95 px-4 py-4 space-y-3">
+              <button
+                onClick={() => {
+                  navigate(isAuthenticated ? '/dashboard' : '/login');
+                  setIsMenuOpen(false);
+                }}
+                className="w-full text-left text-sm text-white hover:text-white/80 transition-colors py-2 px-2 font-medium flex items-center gap-2"
+              >
+                {isAuthenticated ? (
+                  <>
+                    <LayoutDashboard size={16} />
+                    Dive In
+                  </>
+                ) : (
+                  <>
+                    <LogIn size={16} />
+                    Sign In
+                  </>
+                )}
+              </button>
+              <a href="/about" className="block text-sm text-white/60 hover:text-white transition-colors py-2">About</a>
+              <a href="/contact" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Contact</a>
+              <a href="/faq" className="block text-sm text-white/60 hover:text-white transition-colors py-2">FAQ</a>
+              <a href="/terms" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Terms</a>
+              <a href="/privacy" className="block text-sm text-white/60 hover:text-white transition-colors py-2">Privacy</a>
+            </div>
+          )}
+        </nav>
         </nav>
 
         {/* Gradient Overlay - Removed for clean sky */}
