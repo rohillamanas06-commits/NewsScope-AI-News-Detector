@@ -179,12 +179,10 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          {/* Back to Home Button - Hidden on mobile */}
-          {!isMobile && (
-            <Link to="/" className="text-sm text-muted-foreground hover:text-foreground mt-4 text-center">
-              ← Back to Home
-            </Link>
-          )}
+          {/* Back to Home Button */}
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground mt-4 text-center">
+            ← Back to Home
+          </Link>
           </div>
         </div>
       </div>
