@@ -82,8 +82,25 @@ const Index: React.FC = () => {
           }}
         >
           <div className="px-6 py-2 flex items-center justify-end relative h-12">
-            {/* Sign In / Dive In Button - Desktop Only */}
-            {!isMobile && (
+            {/* Sign In / Dive In Button */}
+            {isMobile ? (
+              <button
+                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                className="px-4 py-2 text-sm bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
+              >
+                {isAuthenticated ? (
+                  <>
+                    <LayoutDashboard size={16} />
+                    Dive In
+                  </>
+                ) : (
+                  <>
+                    <LogIn size={16} />
+                    Sign In
+                  </>
+                )}
+              </button>
+            ) : (
               <button
                 onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
                 className="px-5 py-2 bg-transparent text-white font-medium rounded-lg hover:opacity-80 transition-all duration-300 flex items-center gap-2"
@@ -99,16 +116,6 @@ const Index: React.FC = () => {
                     Sign In
                   </>
                 )}
-              </button>
-            )}
-
-            {/* Mobile Sign In Button */}
-            {isMobile && (
-              <button
-                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                className="px-3 py-1.5 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded transition-colors duration-200 ml-2"
-              >
-                {isAuthenticated ? 'Dive In' : 'Sign In'}
               </button>
             )}
           </div>
