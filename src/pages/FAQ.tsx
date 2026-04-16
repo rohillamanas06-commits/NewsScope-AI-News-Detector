@@ -78,7 +78,7 @@ const FAQ: React.FC = () => {
     <div className="min-h-screen bg-background">
       <button
         onClick={() => navigate('/')}
-        className="fixed top-4 left-4 z-50 p-2 hover:bg-muted rounded-lg transition-colors"
+        className="hidden md:block fixed top-4 left-4 z-50 p-2 hover:bg-muted rounded-lg transition-colors"
         aria-label="Back to home"
       >
         <ArrowLeft className="h-6 w-6" />
