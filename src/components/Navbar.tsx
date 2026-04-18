@@ -183,7 +183,7 @@ export const Navbar = () => {
               )}
               {/* Home Button - Mobile Only (Above Dashboard) */}
               {isMobile && (
-                <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
+            <Button variant="ghost" onClick={() => handleNavigation('/')} className="w-full justify-start h-11 px-4 rounded-lg hover:bg-muted/50">
                   <Home className="h-4 w-4 mr-3" />
                   Home
                 </Button>
