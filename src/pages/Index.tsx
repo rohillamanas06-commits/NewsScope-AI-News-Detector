@@ -78,7 +78,6 @@ const Index: React.FC = () => {
           <div className="flex items-center justify-between px-2 md:px-12 py-3">
             {/* Logo Text */}
             <div className="flex items-center gap-2 -ml-2">
-              <span className="text-sm md:text-base font-bold text-white">NewsScope</span>
             </div>
 
             {/* Mobile Menu Button */}
