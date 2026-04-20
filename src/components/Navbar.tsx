@@ -67,7 +67,7 @@ export const Navbar = () => {
         <div className="flex h-12 items-center justify-between relative px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <span className="hidden md:block text-xl font-bold">NewsScope</span>
+            <span className="sm:block hidden text-xl font-bold">NewsScope</span>
           </Link>
 
           {/* Right Side - Auth State */}
