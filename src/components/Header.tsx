@@ -60,7 +60,6 @@ export const Header: React.FC = () => {
             to="/" 
             className="flex items-center gap-3 group"
           >
-            <span className="hidden md:block text-sm md:text-base font-bold text-foreground">NewsScope</span>
           </Link>
 
           {/* Desktop Navigation - Empty */}
