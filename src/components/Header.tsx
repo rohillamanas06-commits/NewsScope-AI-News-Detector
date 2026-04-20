@@ -60,11 +60,7 @@ export const Header: React.FC = () => {
             to="/" 
             className="flex items-center gap-3 group"
           >
-            <img 
-              src="/favicon.ico" 
-              alt="NewsScope Logo" 
-              className="w-8 h-8 md:w-9 md:h-9"
-            />
+            <span className="text-sm md:text-base font-bold text-foreground">NewsScope</span>
           </Link>
 
           {/* Desktop Navigation - Empty */}

@@ -75,7 +75,12 @@ const Index: React.FC = () => {
 
         {/* Navbar */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-white/10 text-white">
-          <div className="flex items-center justify-between px-4 md:px-12 py-3">
+          <div className="flex items-center justify-between px-2 md:px-12 py-3">
+            {/* Logo Text */}
+            <div className="flex items-center gap-2 -ml-2">
+              <span className="text-sm md:text-base font-bold text-white">NewsScope</span>
+            </div>
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
