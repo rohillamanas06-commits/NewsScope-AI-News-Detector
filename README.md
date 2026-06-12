@@ -2,9 +2,10 @@
 
 ## 📸 Screenshots
 
-![NewsScope Screenshot 1](public/Screenshot%202026-04-01%20200656.png)
-![NewsScope Screenshot 2](public/Screenshot%202026-04-01%20201552.png)
 ![NewsScope Screenshot 3](public/Screenshot%202026-04-01%20201654.png)
+![NewsScope Screenshot 2](public/Screenshot%202026-04-01%20201552.png)
+![NewsScope Screenshot 1](public/Screenshot%202026-04-01%20200656.png)
+
 
 ## 🌟 Overview
 
